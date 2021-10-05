@@ -3,7 +3,6 @@ package com.devcomentry.photogallery
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.devcomentry.photogallery.presention.MainActivity
-import com.zxy.recovery.BuildConfig
 import com.zxy.recovery.core.Recovery
 import dagger.hilt.android.HiltAndroidApp
 

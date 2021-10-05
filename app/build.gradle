@@ -37,7 +37,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.5.21'
     }
 }
 
@@ -91,8 +90,9 @@ dependencies {
 
     // glide
     implementation "com.github.bumptech.glide:glide:$glide_version"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     // Crash recovery
-    implementation "com.zxy.android:recovery:$recovery_version"
+    implementation 'com.zxy.android:recovery:1.0.0'
+
 }
