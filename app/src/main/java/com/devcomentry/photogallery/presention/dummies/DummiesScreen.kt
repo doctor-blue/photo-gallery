@@ -1,6 +1,5 @@
 package com.devcomentry.photogallery.presention.dummies
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,9 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.devcomentry.photogallery.presention.common.LocalDataViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun DummiesScreen(
@@ -25,7 +21,7 @@ fun DummiesScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    val list = localDataViewModel.allImage.value.file.size
+    val list = localDataViewModel.dataLocal.value.file.size
 
     Log.d("DataLocal", "getImages: $list")
 
