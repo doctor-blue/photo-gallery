@@ -5,16 +5,24 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.devcomentry.photogallery.MyApplication
 import com.devcomentry.photogallery.domain.model.DataLocal
 import com.devcomentry.photogallery.domain.model.DateSelect
 import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.domain.model.FileModel.Companion.IS_IMAGE
 import com.devcomentry.photogallery.domain.model.Folder
+import com.devcomentry.photogallery.domain.use_case.file.FileUseCases
+import com.devcomentry.photogallery.domain.utils.DataState
+import com.devcomentry.photogallery.presention.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.SimpleDateFormat
@@ -24,11 +32,19 @@ import kotlin.collections.ArrayList
 
 @HiltViewModel
 class LocalDataViewModel @Inject constructor(
-    private val application: Application
+    private val application: Application,
+    private val fileUseCases: FileUseCases,
 ) : ViewModel() {
+
     companion object {
         const val CHECK_ITEM_LOADING = 100
     }
+
+    init {
+        getData()
+    }
+
+    private var getDataJob: Job? = null
 
     private val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.ROOT)
 
@@ -53,11 +69,58 @@ class LocalDataViewModel @Inject constructor(
         MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
         MediaStore.Files.FileColumns.BUCKET_ID,
     )
-    private val _allImage = MutableLiveData<DataLocal>()
-    val allImage: LiveData<DataLocal>
+
+    private val _allImage = mutableStateOf(DataLocal())
+    val allImage: State<DataLocal>
         get() = _allImage
 
-    suspend fun getImages() = withContext(Dispatchers.Default) {
+
+    fun refreshData() {
+        getDataJob?.cancel()
+
+        clearCache()
+
+        getDataJob = viewModelScope.launch(Dispatchers.Main) {
+            getImages()
+        }
+    }
+
+    fun getData() {
+        getDataJob?.cancel()
+        if (Constants.isDataLoaded) {
+            // get data from room
+            getDataFromCache()
+        } else {
+            refreshData()
+        }
+    }
+
+    fun clearCache() {
+        viewModelScope.launch {
+            fileUseCases.clearData()
+        }
+    }
+
+    private fun getDataFromCache() {
+        getDataJob?.cancel()
+        getDataJob = viewModelScope.launch(Dispatchers.IO) {
+            fileUseCases.getFileByType(IS_IMAGE).collect {
+                if (it is DataState.Success) {
+                    val data = it.data
+                    data?.let { dataLocal ->
+                        _allImage.value = allImage.value.copy(
+                            file = dataLocal.file,
+                            folder = dataLocal.folder,
+                            listDate = dataLocal.listDate
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+
+    private suspend fun getImages() = withContext(Dispatchers.Default) {
         val arrMedia = ArrayList<FileModel>()
         val arrFolder = ArrayList<Folder>()
         val folders = HashMap<Long, String>()
@@ -77,6 +140,7 @@ class LocalDataViewModel @Inject constructor(
                 null,
                 sortOrder
             )
+
         if (cursor != null && cursor.count > 0) {
 
             while (cursor.moveToNext()) {
@@ -137,6 +201,7 @@ class LocalDataViewModel @Inject constructor(
                                 it.size = it.size + 1
                             }
                         }
+
                         arrMedia.add(
                             FileModel(
                                 id = idMedia,
@@ -166,15 +231,14 @@ class LocalDataViewModel @Inject constructor(
                         if (check == CHECK_ITEM_LOADING) {
                             check = 0
                             withContext(Dispatchers.Main) {
-                                _allImage.postValue(
-                                    DataLocal(
+                                _allImage.value =
+                                    allImage.value.copy(
                                         file = arrMedia.sortedByDescending { it.timeCreated }
                                             .toMutableList(),
                                         folder = arrFolder.sortedBy { it.name }.toMutableList(),
                                         listDate = arrDate.sortedByDescending { it.time }
                                             .toMutableList()
                                     )
-                                )
 
                             }
                         }
@@ -186,18 +250,31 @@ class LocalDataViewModel @Inject constructor(
             folders.clear()
             dateMap.clear()
         }
-        withContext(Dispatchers.Main) {
-            val a = DataLocal(
-                file = arrMedia.sortedByDescending { it.timeCreated }.toMutableList(),
-                folder = arrFolder.sortedBy { it.name }.toMutableList(),
-                listDate = arrDate.sortedByDescending { it.time }.toMutableList()
-            )
-            Log.d("DataLocal", "getImages: $a")
-            _allImage.postValue(
-             a
-            )
 
+        val dataLocal = DataLocal(
+            file = arrMedia.sortedByDescending { it.timeCreated }
+                .toMutableList(),
+            folder = arrFolder.sortedBy { it.name }.toMutableList(),
+            listDate = arrDate.sortedByDescending { it.time }
+                .toMutableList()
+        )
+
+        withContext(Dispatchers.Main) {
+            Constants.isDataLoaded = true
+            Log.d("DataLocal", "getImages1: ")
+            _allImage.value =
+                allImage.value.copy(
+                    file = dataLocal.file,
+                    folder = dataLocal.folder,
+                    listDate = dataLocal.listDate
+                )
         }
+
+        fileUseCases.addFile(dataLocal.file)
+
+        fileUseCases.addFolder(dataLocal.folder)
+
     }
+
 
 }

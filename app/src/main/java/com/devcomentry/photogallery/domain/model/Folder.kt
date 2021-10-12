@@ -5,4 +5,5 @@ data class Folder(
     val name: String,
     var size: Int,
     var showFull: Boolean = false,
+    val idDatabase: Long = 0,
 )

@@ -3,6 +3,7 @@ package com.devcomentry.photogallery.data.data_source.cache
 import androidx.room.*
 import com.devcomentry.photogallery.data.data_source.model.FileEntity
 import com.devcomentry.photogallery.data.data_source.model.FileEntity.Companion.TABLE_NAME
+import com.devcomentry.photogallery.data.data_source.model.FolderEntity
 
 @Dao
 interface FileDao {
@@ -23,5 +24,21 @@ interface FileDao {
 
     @Query("SELECT * FROM $TABLE_NAME WHERE ${FileEntity.TYPE} = :type")
     suspend fun getFileByType(type: Int): List<FileEntity>
+
+    @Query("DELETE FROM $TABLE_NAME")
+    suspend fun removeAllFile()
+
+    @Query("DELETE FROM ${FolderEntity.TABLE_NAME}")
+    suspend fun removeAllFolder()
+
+    @Query("SELECT * FROM ${FolderEntity.TABLE_NAME}")
+    suspend fun getFolders(): List<FolderEntity>
+
+    @Insert
+    suspend fun addAllFile(files: List<FileEntity>)
+
+    @Insert
+    suspend fun addAllFolder(folders: List<FolderEntity>)
+
 
 }

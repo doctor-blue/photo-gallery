@@ -1,6 +1,7 @@
 package com.devcomentry.photogallery.presention.dummies
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -17,7 +18,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun DummiesScreen(
     navController: NavController,
@@ -25,10 +25,10 @@ fun DummiesScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+    val list = localDataViewModel.allImage.value.file.size
 
-    CoroutineScope(Dispatchers.Main).launch {
-        localDataViewModel.getImages()
-    }
+    Log.d("DataLocal", "getImages: $list")
+
 
     Scaffold(
         floatingActionButton = {

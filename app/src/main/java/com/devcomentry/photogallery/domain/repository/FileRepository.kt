@@ -1,6 +1,7 @@
 package com.devcomentry.photogallery.domain.repository
 
 import com.devcomentry.photogallery.domain.model.FileModel
+import com.devcomentry.photogallery.domain.model.Folder
 
 interface FileRepository {
     suspend fun getFile(): List<FileModel>
@@ -14,4 +15,13 @@ interface FileRepository {
     suspend fun addFile(fileModel: FileModel)
 
     suspend fun removeFile(fileModel: FileModel)
+
+    suspend fun clearFile()
+
+    suspend fun getFolder(): List<Folder>
+
+    suspend fun addAllFile(files: List<FileModel>)
+
+    suspend fun addAllFolder(folders: List<Folder>)
+
 }

@@ -1,5 +1,6 @@
 package com.devcomentry.photogallery.di
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -18,10 +19,10 @@ object RoomModule {
     private var INSTANCE: AppDatabase? = null
 
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+    fun provideDatabase(application: Application): AppDatabase {
         return INSTANCE ?: synchronized(this) {
             val instance = Room.databaseBuilder(
-                context,
+                application,
                 AppDatabase::class.java,
                 AppDatabase.DB_NAME
             )

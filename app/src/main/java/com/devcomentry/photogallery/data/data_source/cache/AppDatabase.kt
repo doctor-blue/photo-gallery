@@ -3,10 +3,12 @@ package com.devcomentry.photogallery.data.data_source.cache
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.devcomentry.photogallery.data.data_source.model.FileEntity
+import com.devcomentry.photogallery.data.data_source.model.FolderEntity
 
 @Database(
     entities = [
         FileEntity::class,
+        FolderEntity::class
     ],
     version = 1
 )

@@ -1,4 +1,4 @@
-package com.devcomentry.photogallery.domain.use_case
+package com.devcomentry.photogallery.domain.use_case.file
 
 import com.devcomentry.photogallery.domain.repository.FileRepository
 

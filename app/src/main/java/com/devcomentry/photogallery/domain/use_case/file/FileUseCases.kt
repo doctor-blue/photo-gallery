@@ -1,4 +1,4 @@
-package com.devcomentry.photogallery.domain.use_case
+package com.devcomentry.photogallery.domain.use_case.file
 
 data class FileUseCases(
     val addFile: AddFile,
@@ -6,4 +6,6 @@ data class FileUseCases(
     val removeFile: RemoveFile,
     val getFileById: GetFileById,
     val getFileByType: GetFileByType,
+    val clearData: ClearData,
+    val addFolder: AddFolder,
 )
