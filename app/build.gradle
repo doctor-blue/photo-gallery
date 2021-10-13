@@ -95,4 +95,7 @@ dependencies {
     // Crash recovery
     implementation 'com.zxy.android:recovery:1.0.0'
 
+    //Permission
+    implementation 'com.karumi:dexter:6.2.3'
+
 }

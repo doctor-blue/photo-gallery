@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Photo Gallery</string>
+    <string name="grant_storage_permission">Grant storage permission</string>
 </resources>

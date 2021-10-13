@@ -1,11 +1,11 @@
 package com.devcomentry.photogallery.presention.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.devcomentry.lib.composable
-import com.devcomentry.photogallery.presention.dummies.DummiesScreen
+import com.devcomentry.photogallery.presention.home.HomeScreen
+import com.devcomentry.photogallery.presention.splash.SplashScreen
 
 @Composable
 fun Navigation(
@@ -14,13 +14,19 @@ fun Navigation(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screen.DummiesScreen.route
+        startDestination = Screen.OurSplashScreen.route
     ) {
 
         composable(
-            screen = Screen.DummiesScreen
+            screen = Screen.OurSplashScreen
         ) {
-            DummiesScreen(navController)
+            SplashScreen(navController)
+        }
+
+        composable(
+            screen = Screen.HomeScreen
+        ) {
+            HomeScreen(navController)
         }
     }
 }
