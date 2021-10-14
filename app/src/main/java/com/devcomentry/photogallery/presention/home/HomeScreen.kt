@@ -6,13 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.compose.rememberNavController
 import com.devcomentry.photogallery.presention.albums.AlbumsScreen
 import com.devcomentry.photogallery.presention.home.components.BottomNavigationBar
-import com.devcomentry.photogallery.presention.navigation.Navigation
 import com.devcomentry.photogallery.presention.navigation.Screen
-import com.devcomentry.photogallery.presention.photos.AllFileScreen
+import com.devcomentry.photogallery.presention.all_file.AllFileScreen
 import com.devcomentry.photogallery.presention.utils.PermissionUtils
 
 @Composable

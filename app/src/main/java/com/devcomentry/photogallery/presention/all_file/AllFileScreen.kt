@@ -1,4 +1,4 @@
-package com.devcomentry.photogallery.presention.photos
+package com.devcomentry.photogallery.presention.all_file
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
