@@ -16,9 +16,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GalleryTheme {
-                Surface {
-                    Navigation()
-                }
+//                Surface {
+//                    Navigation()
+//                }
+                HomeScreen()
             }
         }
     }

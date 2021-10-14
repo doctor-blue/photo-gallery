@@ -20,8 +20,7 @@ import com.devcomentry.photogallery.presention.navigation.Screen
 
 @Composable
 fun BottomNavigationBar(
-    currentScreen: MutableState<Screen>,
-    onScreenSelected:(Screen)->Unit
+    navController:NavController
 ) {
     val items = listOf(
         NavigationItem.AllFile,
@@ -33,8 +32,8 @@ fun BottomNavigationBar(
         contentColor = Color.White
     ) {
         items.forEach { item ->
-//            val navBackStackEntry by navController.currentBackStackEntryAsState()
-//            val currentRoute = navBackStackEntry?.destination?.route
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
             BottomNavigationItem(
                 icon = {
                     Icon(
@@ -46,17 +45,15 @@ fun BottomNavigationBar(
                 selectedContentColor = colorResource(R.color.purple_500),
                 unselectedContentColor = colorResource(R.color.purple_500).copy(0.4f),
                 alwaysShowLabel = true,
-                selected = item.screen == currentScreen.value,
+                selected = item.screen.route == currentRoute,
                 onClick = {
-                   onScreenSelected(item.screen)
+                    navController.navigate(item.screen.route) {
+                        popUpTo(item.screen.route) {
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun BottomNavigationBarPreview() {
-//    BottomNavigationBar()
-//}

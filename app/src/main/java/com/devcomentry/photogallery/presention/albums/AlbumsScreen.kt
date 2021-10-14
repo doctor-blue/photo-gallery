@@ -29,10 +29,6 @@ fun AlbumsScreen(
             imageModel = "https://lh3.googleusercontent.com/W9Wg7CEvYdaVR5s6Z70aSFu8IAukRQrm9S6uEdhPw-YqTxoB-qYv-fFEsjPBW4VEXYtBIO-XOTHkkmy5wkXQdGZEQQ=w640-h400-e365-rj-sc0x00ffffff",
             // Crop, Fit, Inside, FillHeight, FillWidth, None
             contentScale = ContentScale.Crop,
-            // shows an image with a circular revealed animation.
-            circularReveal = CircularReveal(duration = 250),
-            // shows a placeholder ImageBitmap when loading.
-            // shows an error ImageBitmap when the request failed.
         )
     }
 }

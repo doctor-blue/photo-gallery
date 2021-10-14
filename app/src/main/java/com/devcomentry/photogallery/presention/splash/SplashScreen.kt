@@ -35,7 +35,7 @@ fun SplashScreen(navController: NavController) {
         )
         // Customize the delay time
         delay(1500L)
-        navController.navigate(Screen.HomeScreen.route) {
+        navController.navigate(Screen.AllFileScreen.route) {
             popUpTo(Screen.OurSplashScreen.route) {
                 inclusive = true
             }

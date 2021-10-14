@@ -1,5 +1,6 @@
 package com.devcomentry.photogallery.presention.all_file
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavController
+import com.devcomentry.photogallery.presention.navigation.Screen
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -26,14 +28,16 @@ fun AllFileScreen(
             "Hí anh em!!! This is our photos screen",
             style = MaterialTheme.typography.h5
         )
-        GlideImage(
-            imageModel = "https://lh3.googleusercontent.com/W9Wg7CEvYdaVR5s6Z70aSFu8IAukRQrm9S6uEdhPw-YqTxoB-qYv-fFEsjPBW4VEXYtBIO-XOTHkkmy5wkXQdGZEQQ=w640-h400-e365-rj-sc0x00ffffff",
-            // Crop, Fit, Inside, FillHeight, FillWidth, None
-            contentScale = ContentScale.Crop,
-            // shows an image with a circular revealed animation.
-            circularReveal = CircularReveal(duration = 250),
-            // shows a placeholder ImageBitmap when loading.
-            // shows an error ImageBitmap when the request failed.
-        )
+      Box(
+          modifier = Modifier.clickable {
+              navController.navigate(Screen.PhotoDetailScreen.route)
+          }
+      ){
+          GlideImage(
+              imageModel = "https://lh3.googleusercontent.com/W9Wg7CEvYdaVR5s6Z70aSFu8IAukRQrm9S6uEdhPw-YqTxoB-qYv-fFEsjPBW4VEXYtBIO-XOTHkkmy5wkXQdGZEQQ=w640-h400-e365-rj-sc0x00ffffff",
+              // Crop, Fit, Inside, FillHeight, FillWidth, None
+              contentScale = ContentScale.Crop,
+          )
+      }
     }
 }
