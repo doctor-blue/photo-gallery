@@ -20,7 +20,7 @@ import com.devcomentry.photogallery.presention.navigation.Screen
 
 @Composable
 fun BottomNavigationBar(
-    navController:NavController
+    navController: NavController
 ) {
     val items = listOf(
         NavigationItem.AllFile,
@@ -47,9 +47,11 @@ fun BottomNavigationBar(
                 alwaysShowLabel = true,
                 selected = item.screen.route == currentRoute,
                 onClick = {
-                    navController.navigate(item.screen.route) {
-                        popUpTo(item.screen.route) {
-                            inclusive = true
+                    if (item.screen.route != currentRoute) {
+                        navController.navigate(item.screen.route) {
+                            popUpTo(item.screen.route) {
+                                inclusive = true
+                            }
                         }
                     }
                 }
