@@ -1,4 +1,4 @@
-package com.devcomentry.photogallery.presention.all_file
+package com.devcomentry.photogallery.presention.albums
 
 import android.os.Bundle
 import com.devcomentry.photogallery.R

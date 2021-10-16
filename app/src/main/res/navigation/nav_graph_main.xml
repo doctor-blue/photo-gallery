@@ -8,11 +8,11 @@
 
     <fragment
         android:id="@+id/albumsFragment"
-        android:name="com.devcomentry.photogallery.presention.all_file.AlbumsFragment"
+        android:name="com.devcomentry.photogallery.presention.albums.AlbumsFragment"
         android:label="AlbumsFragment" />
     <fragment
         android:id="@+id/allFileFragment"
-        android:name="com.devcomentry.photogallery.presention.albums.AllFileFragment"
+        android:name="com.devcomentry.photogallery.presention.all_file.AllFileFragment"
         android:label="AllFileFragment" >
         <action
             android:id="@+id/action_allFileFragment_to_albumsFragment"
