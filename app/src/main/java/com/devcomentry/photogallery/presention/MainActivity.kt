@@ -1,26 +1,52 @@
 package com.devcomentry.photogallery.presention
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.compose.material.Surface
-import com.devcomentry.photogallery.presention.home.HomeScreen
-import com.devcomentry.photogallery.presention.home.components.BottomNavigationBar
-import com.devcomentry.photogallery.presention.navigation.Navigation
-import com.devcomentry.photogallery.ui.theme.GalleryTheme
+import android.util.Log
+import androidx.core.view.isVisible
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import com.devcomentry.moonlight.binding.BindingActivity
+import com.devcomentry.photogallery.R
+import com.devcomentry.photogallery.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            GalleryTheme {
-//                Surface {
-//                    Navigation()
-//                }
-                HomeScreen()
+class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
+
+    private lateinit var navController: NavController
+    private var isInit = false
+    override fun onResume() {
+        super.onResume()
+        isInit = true
+    }
+
+    override fun initEvents() {
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.allFileFragment || destination.id == R.id.albumsFragment) {
+                binding.bottomBar.show()
+                binding.bottomBar.isVisible = true
+                Log.d("MainActivity", "show + ${binding.bottomBar.isShow}")
+            } else {
+                if (isInit) {
+                    binding.bottomBar.hide()
+                }
+                Log.d("MainActivity", "hide + ${binding.bottomBar.isShow}")
             }
         }
+
     }
+
+    override fun initControls(savedInstanceState: Bundle?) {
+        navController = findNavController(R.id.main_fragment)
+        binding.bottomBar.setupWithNavController(navController)
+    }
+
+    override fun navigateUpTo(upIntent: Intent?): Boolean {
+        navController.navigateUp()
+        return true
+    }
+
+
 }

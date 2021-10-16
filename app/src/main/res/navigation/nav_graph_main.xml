@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/splashFragment">
+
+
+    <fragment
+        android:id="@+id/albumsFragment"
+        android:name="com.devcomentry.photogallery.presention.all_file.AlbumsFragment"
+        android:label="AlbumsFragment" />
+    <fragment
+        android:id="@+id/allFileFragment"
+        android:name="com.devcomentry.photogallery.presention.albums.AllFileFragment"
+        android:label="AllFileFragment" >
+        <action
+            android:id="@+id/action_allFileFragment_to_albumsFragment"
+            app:destination="@id/albumsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.devcomentry.photogallery.presention.splash.SplashFragment"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_splashFragment_to_allFileFragment"
+            app:destination="@id/allFileFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/nav_graph_main"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+</navigation>

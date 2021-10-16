@@ -5,11 +5,10 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.devcomentry.photogallery.MyApplication
 import com.devcomentry.photogallery.domain.model.DataLocal
 import com.devcomentry.photogallery.domain.model.DateSelect
 import com.devcomentry.photogallery.domain.model.FileModel
@@ -70,8 +69,8 @@ class LocalDataViewModel @Inject constructor(
         MediaStore.Files.FileColumns.BUCKET_ID,
     )
 
-    private val _dataLocal = mutableStateOf(DataLocal())
-    val dataLocal: State<DataLocal>
+    private val _dataLocal = MutableLiveData(DataLocal())
+    val dataLocal: LiveData<DataLocal>
         get() = _dataLocal
 
 
@@ -108,10 +107,12 @@ class LocalDataViewModel @Inject constructor(
                 if (it is DataState.Success) {
                     val data = it.data
                     data?.let { data ->
-                        _dataLocal.value = dataLocal.value.copy(
-                            file = data.file,
-                            folder = data.folder,
-                            listDate = data.listDate
+                        _dataLocal.postValue(
+                            DataLocal(
+                                file = data.file,
+                                folder = data.folder,
+                                listDate = data.listDate
+                            )
                         )
                     }
                 }
@@ -231,14 +232,13 @@ class LocalDataViewModel @Inject constructor(
                         if (check == CHECK_ITEM_LOADING) {
                             check = 0
                             withContext(Dispatchers.Main) {
-                                _dataLocal.value =
-                                    dataLocal.value.copy(
-                                        file = arrMedia.sortedByDescending { it.timeCreated }
-                                            .toMutableList(),
-                                        folder = arrFolder.sortedBy { it.name }.toMutableList(),
-                                        listDate = arrDate.sortedByDescending { it.time }
-                                            .toMutableList()
-                                    )
+                                _dataLocal.postValue(DataLocal(
+                                    file = arrMedia.sortedByDescending { it.timeCreated }
+                                        .toMutableList(),
+                                    folder = arrFolder.sortedBy { it.name }.toMutableList(),
+                                    listDate = arrDate.sortedByDescending { it.time }
+                                        .toMutableList()
+                                ))
 
                             }
                         }
@@ -262,12 +262,7 @@ class LocalDataViewModel @Inject constructor(
         withContext(Dispatchers.Main) {
             Constants.isDataLoaded = true
             Log.d("DataLocal", "getImages1: ")
-            _dataLocal.value =
-                dataLocal.value.copy(
-                    file = data.file,
-                    folder = data.folder,
-                    listDate = data.listDate
-                )
+            _dataLocal.postValue(data)
         }
 
         fileUseCases.addFile(data.file)

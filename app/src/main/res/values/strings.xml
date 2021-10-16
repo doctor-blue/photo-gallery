@@ -3,4 +3,6 @@
     <string name="grant_storage_permission">Grant storage permission</string>
     <string name="photos">Photos</string>
     <string name="albums">Albums</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
