@@ -16,7 +16,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/first_album_image"
+                android:id="@+id/folder_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_recovery_page"
@@ -30,9 +30,9 @@
                 android:layout_height="wrap_content"
                 android:text="Folder Name"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="@+id/first_album_image"
-                app:layout_constraintRight_toRightOf="@+id/first_album_image"
-                app:layout_constraintTop_toBottomOf="@+id/first_album_image" />
+                app:layout_constraintLeft_toLeftOf="@+id/folder_image"
+                app:layout_constraintRight_toRightOf="@+id/folder_image"
+                app:layout_constraintTop_toBottomOf="@+id/folder_image" />
 
             <TextView
                 android:id="@+id/folder_size"

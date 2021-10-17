@@ -2,11 +2,9 @@ package com.devcomentry.photogallery.presention.albums
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentAlbumsBinding
-import com.devcomentry.photogallery.domain.model.Folder
 import com.devcomentry.photogallery.presention.common.BaseFragment
 import com.devcomentry.photogallery.presention.common.LocalDataViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,8 +20,15 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_alb
 
         viewModel.getData()
 
-        viewModel.dataLocal.observe(viewLifecycleOwner) {
-            albumAdapter.submitList(it.folder)
+        viewModel.dataLocal.observe(viewLifecycleOwner) { dataLocal ->
+            val folderDetails = mutableListOf<FolderDetail>()
+            dataLocal.folder.forEach { folder ->
+                folderDetails.add(
+                    FolderDetail(
+                        folder,
+                        dataLocal.file.filter { it.idFolder == folder.id }))
+            }
+            albumAdapter.submitList(folderDetails)
         }
 
         binding.rcvListAlbum.apply {
@@ -38,7 +43,7 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_alb
         super.initEvents()
     }
 
-    private val onAlbumClick: (Folder) -> Unit =  {
+    private val onAlbumClick: (FolderDetail) -> Unit = {
 //        navController.navigate()
     }
 
