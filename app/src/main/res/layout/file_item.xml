@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_file"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        />
+    <View
+        android:id="@+id/view_blur"
+        android:layout_width="0dp"
+
+        android:layout_height="0dp"
+        android:background="@drawable/bg_file_item_selected"
+        app:layout_constraintStart_toStartOf="@id/img_file"
+        app:layout_constraintEnd_toEndOf="@id/img_file"
+        app:layout_constraintTop_toTopOf="@id/img_file"
+        app:layout_constraintDimensionRatio="6:1"/>
+    <CheckBox
+        android:button="@drawable/cb_selector"
+        android:checked="false"
+        android:layout_marginStart="@dimen/img_padding"
+        android:id="@+id/cb_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/img_file"
+        app:layout_constraintTop_toTopOf="@id/img_file"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
