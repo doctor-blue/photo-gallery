@@ -1,14 +1,15 @@
 package com.devcomentry.photogallery.presention.all_file.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FileItemBinding
 import com.devcomentry.photogallery.domain.model.FileModel
+import com.devcomentry.photogallery.presention.utils.convertDpToPixel
 import com.devcomentry.photogallery.presention.utils.getDisplayWidth
 import com.devcomentry.photogallery.presention.utils.gone
 import com.devcomentry.photogallery.presention.utils.show
@@ -54,6 +55,14 @@ class FileAdapter : ListAdapter<FileModel, FileAdapter.FileViewHolder>(FileDiff(
             } else {
                 binding.viewBlur.gone()
                 binding.cbFile.gone()
+            }
+
+            if (fileModel.isSelected) {
+                binding.root.setBackgroundResource(R.color.blue_200_alpha)
+                binding.root.setPadding(binding.root.context.convertDpToPixel(8f).toInt())
+            } else {
+                binding.root.background = null
+                binding.root.setPadding(0)
             }
         }
 

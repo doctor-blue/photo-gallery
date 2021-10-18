@@ -38,7 +38,7 @@
             android:visibility="gone"
             app:iconTintActive="@color/light_blue_500"
             app:indicatorColor="@color/light_blue_500"
-            app:indicatorPosition="top"
+            app:indicatorPosition="bottom"
             app:indicatorType="point"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -25,6 +25,8 @@
     <color name="blue_200">#90caf9</color>
     <color name="blue_500">#2196f3</color>
     <color name="blue_700">#1976d2</color>
+    <color name="blue_200_alpha">#CC90caf9</color>
+
 
     <color name="light_blue_200">#81d4fa</color>
     <color name="light_blue_500">#03a9f4</color>
