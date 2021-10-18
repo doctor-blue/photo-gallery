@@ -1,7 +1,6 @@
 package com.devcomentry.photogallery.presention.common
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,6 +71,7 @@ abstract class BaseFragment<T : ViewDataBinding> constructor(
         _binding?.unbind()
         _binding = null
     }
+
     fun safeNav(currentDestination: Int, action: Int) {
         if (navController.currentDestination?.id == currentDestination) {
             lifecycle.addObserver(object : LifecycleEventObserver {
