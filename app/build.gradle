@@ -36,7 +36,7 @@ android {
     }
     buildFeatures {
         dataBinding true
-        viewBinding = true
+        viewBinding true
     }
 }
 
@@ -105,5 +105,8 @@ dependencies {
     implementation "com.afollestad.material-dialogs:bottomsheets:$material_dialog_version"
 
     implementation "com.github.doctor-blue:moony_nav_bar_android:$moonyNavBar"
+
+    // ripple effect
+    implementation 'com.balysv:material-ripple:1.0.2'
 
 }

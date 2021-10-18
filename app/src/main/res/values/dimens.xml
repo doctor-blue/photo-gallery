@@ -22,4 +22,7 @@
     <dimen name="text_size_10">10sp</dimen>
 
     <dimen name="height_line">0.32dp</dimen>
+    <dimen name="spacing_xsmall">2dp</dimen>
+    <dimen name="spacing_large">15dp</dimen>
+    <dimen name="spacing_smlarge">18dp</dimen>
 </resources>
