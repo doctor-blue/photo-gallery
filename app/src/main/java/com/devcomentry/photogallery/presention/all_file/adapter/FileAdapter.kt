@@ -2,34 +2,64 @@ package com.devcomentry.photogallery.presention.all_file.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.setPadding
+import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FileItemBinding
+import com.devcomentry.photogallery.databinding.ItemGridDateSectionedBinding
+import com.devcomentry.photogallery.domain.model.DateSelect
 import com.devcomentry.photogallery.domain.model.FileModel
-import com.devcomentry.photogallery.presention.utils.convertDpToPixel
 import com.devcomentry.photogallery.presention.utils.getDisplayWidth
-import com.devcomentry.photogallery.presention.utils.gone
-import com.devcomentry.photogallery.presention.utils.show
 
-class FileAdapter : ListAdapter<FileModel, FileAdapter.FileViewHolder>(FileDiff()) {
-    private val isShowSelector = false
+class FileAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(FileDiff()) {
+    private var isShowSelector = false
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {
-        val binding =
-            FileItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        val desiredWidth = parent.context.getDisplayWidth() / 3
-        return FileViewHolder(binding, desiredWidth = desiredWidth.toInt())
+    companion object {
+        private const val ITEM_IMAGE = 0
+        private const val ITEM_TITLE = 1
     }
 
-    override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
-        holder.onBind(currentList[position])
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
+        if (viewType == ITEM_IMAGE) {
+            val binding =
+                FileItemBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            val desiredWidth = parent.context.getDisplayWidth() / 3
+            return FileViewHolder(binding, desiredWidth = desiredWidth.toInt())
+        } else {
+            val binding =
+                ItemGridDateSectionedBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            return DateTitleViewHolder(binding)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (currentList[position] is DateSelect)
+            ITEM_TITLE
+        else
+            ITEM_IMAGE
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+        val layoutParams = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
+        layoutParams.isFullSpan = holder is DateTitleViewHolder
+
+        if (holder is FileViewHolder)
+            holder.onBind(currentList[position] as FileModel)
+        else if (holder is DateTitleViewHolder)
+            holder.bind(currentList[position] as DateSelect)
     }
 
     fun showSelector() {
@@ -48,22 +78,7 @@ class FileAdapter : ListAdapter<FileModel, FileAdapter.FileViewHolder>(FileDiff(
         fun onBind(fileModel: FileModel) {
 
             setImage(fileModel)
-            binding.cbFile.isChecked = fileModel.isSelected
-            if (isShowSelector) {
-                binding.viewBlur.show()
-                binding.cbFile.show()
-            } else {
-                binding.viewBlur.gone()
-                binding.cbFile.gone()
-            }
-
-            if (fileModel.isSelected) {
-                binding.root.setBackgroundResource(R.color.blue_200_alpha)
-                binding.root.setPadding(binding.root.context.convertDpToPixel(8f).toInt())
-            } else {
-                binding.root.background = null
-                binding.root.setPadding(0)
-            }
+            showSelector(fileModel, isShowSelector)
         }
 
         private fun setImage(item: FileModel) {
@@ -74,6 +89,16 @@ class FileAdapter : ListAdapter<FileModel, FileAdapter.FileViewHolder>(FileDiff(
 
         private fun getError(): Int {
             return R.drawable.ic_image_not_found
+        }
+    }
+
+    inner class DateTitleViewHolder(
+        val binding: ItemGridDateSectionedBinding
+    ) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: DateSelect) {
+            binding.tvTitleSection.text = item.month
         }
     }
 

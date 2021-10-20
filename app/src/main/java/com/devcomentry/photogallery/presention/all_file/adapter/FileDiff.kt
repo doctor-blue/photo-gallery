@@ -1,15 +1,20 @@
 package com.devcomentry.photogallery.presention.all_file.adapter
 
+import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.devcomentry.photogallery.domain.model.DateSelect
 import com.devcomentry.photogallery.domain.model.FileModel
 
-class FileDiff : DiffUtil.ItemCallback<FileModel>() {
-    override fun areItemsTheSame(oldItem: FileModel, newItem: FileModel): Boolean {
+class FileDiff : DiffUtil.ItemCallback<Any>() {
+    override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: FileModel, newItem: FileModel): Boolean {
-        return oldItem.name == newItem.name
+    @SuppressLint("DiffUtilEquals")
+    override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+        return if ((oldItem is FileModel && newItem is FileModel) || (newItem is DateSelect && oldItem is DateSelect))
+            oldItem == newItem
+        else false
     }
 }

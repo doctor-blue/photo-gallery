@@ -39,6 +39,9 @@ data class FileEntity(
     @ColumnInfo(name = TIME_CREATED)
     var timeCreated: Long,
 
+    @ColumnInfo(name = TIME_FILE)
+    var timeFile: String,
+
     @ColumnInfo(name = LINK_THUMB)
     var linkThumb: String,
 
@@ -65,6 +68,7 @@ data class FileEntity(
         const val SIZE = "size"
         const val DURATION = "duration"
         const val TIME_CREATED = "timeCreated"
+        const val TIME_FILE = "timeFile"
         const val LINK_THUMB = "linkThumb"
         const val WIDTH = "width"
         const val HEIGHT = "height"

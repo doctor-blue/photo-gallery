@@ -2,6 +2,7 @@ package com.devcomentry.photogallery.domain.model
 
 data class DateSelect(
     val date: String,
+    val month:String,
     val time: Long,
     var type: Int,
     var showFull: Boolean = true,

@@ -19,7 +19,8 @@ class FileEntityMapper : DomainMapper<FileEntity, FileModel> {
         linkThumb = entity.linkThumb,
         width = entity.width,
         height = entity.height,
-        isFavorite = entity.isFavorite
+        isFavorite = entity.isFavorite,
+        timeFile = entity.timeFile
     )
 
     override fun fromDomain(model: FileModel): FileEntity = FileEntity(
@@ -36,7 +37,8 @@ class FileEntityMapper : DomainMapper<FileEntity, FileModel> {
         linkThumb = model.linkThumb,
         width = model.width,
         height = model.height,
-        isFavorite = model.isFavorite
+        isFavorite = model.isFavorite,
+        timeFile = model.timeFile
     )
 
     fun toDomainList(list: List<FileEntity>): List<FileModel> = list.map {

@@ -10,6 +10,7 @@ data class FileModel(
     var size: Float = 0f,
     var duration: Long = 0L,
     var timeCreated: Long,
+    var timeFile: String,
     var idDatabase: Long = 0,
     var linkThumb: String = "",
     var width: Long = 0L,

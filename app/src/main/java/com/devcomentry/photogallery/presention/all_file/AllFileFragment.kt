@@ -1,9 +1,11 @@
 package com.devcomentry.photogallery.presention.all_file
 
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentAllFileBinding
+import com.devcomentry.photogallery.domain.model.DateSelect
+import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.all_file.adapter.FileAdapter
 import com.devcomentry.photogallery.presention.common.BaseFragment
 import com.devcomentry.photogallery.presention.utils.PermissionUtils
@@ -24,19 +26,24 @@ class AllFileFragment :
     override fun initControls(savedInstanceState: Bundle?) {
         super.initControls(savedInstanceState)
 
-        localDataViewModel.dataLocal.observe(viewLifecycleOwner, {
-            fileAdapter.submitList(it.file)
+        localDataViewModel.dataLocal.observe(viewLifecycleOwner, { dataLocal ->
+            val list: MutableList<Any> = mutableListOf()
+            list.addAll(dataLocal.file)
+            list.addAll(0, dataLocal.listMonth)
+            list.sortByDescending { if (it is FileModel) it.timeCreated else (it as DateSelect).time }
+            fileAdapter.submitList(list)
         })
 
         binding {
-            rvAllFile.layoutManager = GridLayoutManager(requireContext(), 3)
-            rvAllFile.addItemDecoration(
-                GridSpacingItemDecoration(
-                    3,
-                    2,
-                    false
-                )
-            )
+            rvAllFile.layoutManager =
+                StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+//            rvAllFile.addItemDecoration(
+//                GridSpacingItemDecoration(
+//                    3,
+//                    2,
+//                    false
+//                )
+//            )
             rvAllFile.adapter = fileAdapter
 
         }

@@ -17,6 +17,8 @@ import com.devcomentry.photogallery.domain.model.Folder
 import com.devcomentry.photogallery.domain.use_case.file.FileUseCases
 import com.devcomentry.photogallery.domain.utils.DataState
 import com.devcomentry.photogallery.presention.utils.Constants
+import com.devcomentry.photogallery.presention.utils.Constants.formatter
+import com.devcomentry.photogallery.presention.utils.Constants.monthFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,7 +26,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -45,7 +46,6 @@ class LocalDataViewModel @Inject constructor(
 
     private var getDataJob: Job? = null
 
-    private val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.ROOT)
 
     private val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
 
@@ -127,6 +127,8 @@ class LocalDataViewModel @Inject constructor(
         val folders = HashMap<Long, String>()
         val arrDate = ArrayList<DateSelect>()
         val dateMap = HashMap<String, String>()
+        val arrMonth = ArrayList<DateSelect>()
+        val monthMap = HashMap<String, String>()
 
         var check = 0
 
@@ -184,8 +186,10 @@ class LocalDataViewModel @Inject constructor(
                     val timeModified = File(path).lastModified()
 
                     var timeFile = "14/05/2021"
+                    var monthFile = "05/2021"
                     try {
                         timeFile = formatter.format(timeModified)
+                        monthFile = monthFormatter.format(timeModified)
                     } catch (e: Exception) {
                     }
 
@@ -210,6 +214,7 @@ class LocalDataViewModel @Inject constructor(
                                 name = nameMedia,
                                 uri = contentUri.toString(),
                                 path = path,
+                                timeFile = timeFile,
                                 timeCreated = timeModified,
                                 type = IS_IMAGE,
                                 size = File(path).length().toFloat()
@@ -222,10 +227,24 @@ class LocalDataViewModel @Inject constructor(
                                     date = timeFile,
                                     type = IS_IMAGE,
                                     time = timeModified,
-                                    listIdFolder = arrayListOf(folderId)
+                                    listIdFolder = arrayListOf(folderId),
+                                    month = monthFile
                                 )
                             )
                             dateMap[timeFile] = timeFile
+                        }
+
+                        if (!monthMap.containsKey(monthFile)) {
+                            arrMonth.add(
+                                DateSelect(
+                                    date = timeFile,
+                                    type = IS_IMAGE,
+                                    time = timeModified,
+                                    listIdFolder = arrayListOf(folderId),
+                                    month = monthFile
+                                )
+                            )
+                            monthMap[monthFile] = monthFile
                         }
 
                         check++
@@ -237,6 +256,8 @@ class LocalDataViewModel @Inject constructor(
                                         .toMutableList(),
                                     folder = arrFolder.sortedBy { it.name }.toMutableList(),
                                     listDate = arrDate.sortedByDescending { it.time }
+                                        .toMutableList(),
+                                    listMonth = arrMonth.sortedByDescending { it.time }
                                         .toMutableList()
                                 ))
 
@@ -256,6 +277,8 @@ class LocalDataViewModel @Inject constructor(
                 .toMutableList(),
             folder = arrFolder.sortedBy { it.name }.toMutableList(),
             listDate = arrDate.sortedByDescending { it.time }
+                .toMutableList(),
+            listMonth = arrMonth.sortedByDescending { it.time }
                 .toMutableList()
         )
 
