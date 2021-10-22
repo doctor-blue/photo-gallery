@@ -23,7 +23,7 @@ abstract class BaseFragment<T : ViewDataBinding> constructor(
     @LayoutRes val layoutId: Int
 ) : Fragment(), Initialization {
 
-    protected val localDataViewModel: LocalDataViewModel by activityViewModels()
+    val localDataViewModel: LocalDataViewModel by activityViewModels()
     lateinit var navController: NavController
 
     /**

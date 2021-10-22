@@ -42,7 +42,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
+            <LinearLayout
+                android:id="@+id/ll_list_empty"
+                android:orientation="vertical"
+                android:alpha="0.5"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_height="match_parent">
+              <androidx.appcompat.widget.AppCompatImageView
+                  android:src="@drawable/img_empty_box"
+                  android:layout_width="256dp"
+                  android:layout_height="256dp"
+                  />
+            </LinearLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.appbar.AppBarLayout
@@ -50,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">

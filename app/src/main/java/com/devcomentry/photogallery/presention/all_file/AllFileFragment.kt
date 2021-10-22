@@ -16,15 +16,17 @@ import com.devcomentry.photogallery.presention.utils.show
 class AllFileFragment :
     BaseFragment<FragmentAllFileBinding>(R.layout.fragment_all_file) {
 
-     val fileAdapter: FileAdapter by lazy {
+    val fileAdapter: FileAdapter by lazy {
         FileAdapter(onItemSelected, onItemUnselected, onItemClick)
     }
 
-     var numFileSelected = 0
+    var numFileSelected = 0
 
     override fun initEvents() {
         super.initEvents()
-        PermissionUtils.checkPermission(requireContext(), {}, {})
+        PermissionUtils.checkPermission(requireContext(), {
+            localDataViewModel.refreshData()
+        }, {})
 
         binding {
             toolbarSelected.setNavigationOnClickListener {
@@ -46,8 +48,11 @@ class AllFileFragment :
             val list: MutableList<Any> = mutableListOf()
             list.addAll(dataLocal.file)
             list.addAll(0, dataLocal.listMonth)
+
             list.sortByDescending { if (it is FileModel) it.timeCreated else (it as DateSelect).time }
             fileAdapter.submitList(list)
+
+            showEmptyLisLayout(list.isEmpty())
         })
 
         binding {
@@ -70,7 +75,6 @@ class AllFileFragment :
         super.onResume()
         unselectedAll()
     }
-
 
 
 //    private fun initComponent() {

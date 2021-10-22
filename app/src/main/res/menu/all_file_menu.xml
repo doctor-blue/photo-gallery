@@ -4,9 +4,12 @@
         android:id="@+id/mnu_select_items"
         android:title="@string/select_items" />
     <item
+        android:id="@+id/mnu_reload_from_disk"
+        android:title="@string/reload_from_disk" />
+    <item
         android:id="@+id/mnu_settings"
         android:title="@string/settings" />
     <item
-        android:id="@+id/mnu_favorite"
-        android:title="@string/favorite" />
+        android:id="@+id/mnu_favorites"
+        android:title="@string/favorites" />
 </menu>

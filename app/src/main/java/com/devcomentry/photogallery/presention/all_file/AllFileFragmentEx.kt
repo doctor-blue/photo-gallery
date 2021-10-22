@@ -50,11 +50,31 @@ fun AllFileFragment.onToolbarItemClick(item: MenuItem) {
             fileAdapter.isShowSelector = true
             updateFileSelectedToolbar(true)
         }
-        R.id.mnu_favorite -> {
+        R.id.mnu_favorites -> {
 
+        }
+        R.id.mnu_reload_from_disk -> {
+            localDataViewModel.refreshData()
         }
         R.id.mnu_settings -> {
 
         }
+    }
+}
+
+fun AllFileFragment.showEmptyLisLayout(isVisible: Boolean) {
+    if (isVisible) {
+        binding {
+            llListEmpty.show()
+            rvAllFile.gone()
+            toolbar.menu.findItem(R.id.mnu_select_items).isVisible = false
+        }
+    } else {
+        binding {
+            llListEmpty.gone()
+            rvAllFile.show()
+            toolbar.menu.findItem(R.id.mnu_select_items).isVisible = true
+        }
+
     }
 }
