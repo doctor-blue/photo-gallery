@@ -19,15 +19,18 @@ fun FileAdapter.FileViewHolder.initEvents() {
         true
     }
 
-    binding.cbFile.setOnCheckedChangeListener { _, isSelected ->
-        fileModel!!.isSelected = isSelected
-        if (isSelected) {
-            binding.root.setBackgroundResource(R.color.blue_200_alpha)
-            binding.root.setPadding(binding.root.context.convertDpToPixel(8f).toInt())
-        } else {
-            binding.root.background = null
-            binding.root.setPadding(0)
-        }
+//    binding.cbFile.setOnCheckedChangeListener { _, isSelected ->
+//        fileModel!!.isSelected = isSelected
+//        if (isSelected) {
+//            binding.root.setBackgroundResource(R.color.blue_200_alpha)
+//            binding.root.setPadding(binding.root.context.convertDpToPixel(8f).toInt())
+//        } else {
+//            binding.root.background = null
+//            binding.root.setPadding(0)
+//        }
+//    }
+    binding.cbFile.setPreventDoubleClick {
+        onItemClick(!fileModel!!.isSelected)
     }
 }
 
@@ -42,10 +45,10 @@ fun FileAdapter.FileViewHolder.showSelector(fileModel: FileModel, isShowSelector
     }
 
     if (fileModel.isSelected) {
-        binding.root.setBackgroundResource(R.color.blue_200_alpha)
-        binding.root.setPadding(binding.root.context.convertDpToPixel(8f).toInt())
+        binding.llImage.setBackgroundResource(R.color.blue_200_alpha)
+        binding.llImage.setPadding(binding.root.context.convertDpToPixel(8f).toInt())
     } else {
-        binding.root.background = null
-        binding.root.setPadding(0)
+        binding.llImage.background = null
+        binding.llImage.setPadding(0)
     }
 }

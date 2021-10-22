@@ -38,12 +38,12 @@ abstract class BaseFragment<T : ViewDataBinding> constructor(
      * A data-binding property will be initialized in [onCreateView].
      * And provide the inflated view which depends on [layoutId].
      */
-    protected val binding: T
+    val binding: T
         get() = checkNotNull(_binding) {
             "Fragment $this binding cannot be accessed before onCreateView() or after onDestroyView()"
         }
 
-    protected inline fun binding(block: T.() -> Unit): T {
+    inline fun binding(block: T.() -> Unit): T {
         return binding.apply(block)
     }
 

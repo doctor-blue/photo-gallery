@@ -2,7 +2,6 @@ package com.devcomentry.photogallery.presention.all_file.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -22,10 +21,10 @@ class FileAdapter(
 
     var isShowSelector = false
         set(value) {
-           if (value!=field){
-               field = value
-               showSelector()
-           }
+            if (value != field) {
+                field = value
+                showSelector()
+            }
         }
 
     companion object {
@@ -70,7 +69,7 @@ class FileAdapter(
         if (holder is FileViewHolder)
             holder.onBind(currentList[position] as FileModel)
         else if (holder is DateTitleViewHolder)
-            holder.bind(currentList[position] as DateSelect)
+            holder.onBind(currentList[position] as DateSelect)
     }
 
     override fun onBindViewHolder(
@@ -82,8 +81,9 @@ class FileAdapter(
             super.onBindViewHolder(holder, position, payloads)
         } else {
             for (item in payloads) {
-                if (item is Payload && holder is FileViewHolder) {
-                    holder.onBind(currentList[position] as FileModel)
+                if (item is Payload) {
+                    if (holder is FileViewHolder)
+                        holder.onBind(currentList[position] as FileModel)
                 }
             }
         }
@@ -91,8 +91,19 @@ class FileAdapter(
 
     private fun showSelector() {
         for (i in currentList.indices) {
-            notifyItemChanged(i, Payload())
+            if (currentList[i] is FileModel)
+                notifyItemChanged(i, Payload())
         }
+    }
+
+    fun unselectedAll() {
+        for (i in currentList.indices) {
+            val current = currentList[i]
+            if (current is FileModel) {
+                current.isSelected = false
+            }
+        }
+        isShowSelector = false
     }
 
     inner class FileViewHolder(
@@ -128,17 +139,21 @@ class FileAdapter(
 
         fun onItemClick(isSelected: Boolean) {
             if (isShowSelector) {
-                if (isSelected) {
-                    fileModel!!.isSelected = true
-                    onItemSelected(fileModel!!)
-                } else {
-                    fileModel!!.isSelected = false
-                    onItemUnselected(fileModel!!)
-                }
+                onItemSelected(isSelected)
             } else {
                 onItemClick(fileModel!!)
             }
             showSelector(fileModel!!, isShowSelector)
+        }
+
+        fun onItemSelected(isSelected: Boolean) {
+            if (isSelected) {
+                fileModel!!.isSelected = true
+                onItemSelected(fileModel!!)
+            } else {
+                fileModel!!.isSelected = false
+                onItemUnselected(fileModel!!)
+            }
         }
     }
 
@@ -147,7 +162,7 @@ class FileAdapter(
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: DateSelect) {
+        fun onBind(item: DateSelect) {
             binding.tvTitleSection.text = item.month
         }
     }

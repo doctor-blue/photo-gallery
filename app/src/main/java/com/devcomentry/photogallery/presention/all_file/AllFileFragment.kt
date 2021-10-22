@@ -7,22 +7,37 @@ import com.devcomentry.photogallery.databinding.FragmentAllFileBinding
 import com.devcomentry.photogallery.domain.model.DateSelect
 import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.all_file.adapter.FileAdapter
+import com.devcomentry.photogallery.presention.all_file.adapter.Payload
 import com.devcomentry.photogallery.presention.common.BaseFragment
 import com.devcomentry.photogallery.presention.utils.PermissionUtils
+import com.devcomentry.photogallery.presention.utils.gone
+import com.devcomentry.photogallery.presention.utils.show
 
 class AllFileFragment :
     BaseFragment<FragmentAllFileBinding>(R.layout.fragment_all_file) {
 
-    private val fileAdapter: FileAdapter by lazy {
-        FileAdapter(onItemSelected, onItemUnselected,onItemClick)
+     val fileAdapter: FileAdapter by lazy {
+        FileAdapter(onItemSelected, onItemUnselected, onItemClick)
     }
 
-    private var numFileSelected = 0
+     var numFileSelected = 0
 
     override fun initEvents() {
         super.initEvents()
         PermissionUtils.checkPermission(requireContext(), {}, {})
+
+        binding {
+            toolbarSelected.setNavigationOnClickListener {
+                unselectedAll()
+            }
+
+            toolbar.setOnMenuItemClickListener {
+                onToolbarItemClick(it)
+                true
+            }
+        }
     }
+
 
     override fun initControls(savedInstanceState: Bundle?) {
         super.initControls(savedInstanceState)
@@ -51,18 +66,11 @@ class AllFileFragment :
 
     }
 
-    private val onItemSelected: (FileModel) -> Unit = {
-        numFileSelected++
+    override fun onResume() {
+        super.onResume()
+        unselectedAll()
     }
 
-    private val onItemUnselected: (FileModel) -> Unit = {
-        numFileSelected--
-        if (numFileSelected == 0)
-            fileAdapter.isShowSelector = false
-    }
-    private val onItemClick: (FileModel) -> Unit = {
-
-    }
 
 
 //    private fun initComponent() {

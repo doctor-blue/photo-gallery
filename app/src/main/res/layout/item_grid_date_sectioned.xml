@@ -12,7 +12,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:textColor="@color/black"
         android:fontFamily="@font/inter_semibold_600"
-        android:textSize="@dimen/text_size_16"
+        android:textSize="@dimen/text_size_14"
         tools:text="Section Title" />
 
 </LinearLayout>

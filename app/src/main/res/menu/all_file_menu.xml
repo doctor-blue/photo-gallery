@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mnu_select_items"
+        android:title="@string/select_items" />
+    <item
+        android:id="@+id/mnu_settings"
+        android:title="@string/settings" />
+    <item
+        android:id="@+id/mnu_favorite"
+        android:title="@string/favorite" />
+</menu>
