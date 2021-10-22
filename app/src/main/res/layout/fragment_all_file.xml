@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/space_screen_super_small"
         tools:context=".presention.all_file.AllFileFragment">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_all_file"

@@ -14,8 +14,19 @@ import com.devcomentry.photogallery.domain.model.DateSelect
 import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.utils.getDisplayWidth
 
-class FileAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(FileDiff()) {
-    private var isShowSelector = false
+class FileAdapter(
+    val onItemSelected: (FileModel) -> Unit,
+    val onItemUnselected: (FileModel) -> Unit,
+    val onItemClick: (FileModel) -> Unit
+) : ListAdapter<Any, RecyclerView.ViewHolder>(FileDiff()) {
+
+    var isShowSelector = false
+        set(value) {
+           if (value!=field){
+               field = value
+               showSelector()
+           }
+        }
 
     companion object {
         private const val ITEM_IMAGE = 0
@@ -62,8 +73,26 @@ class FileAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(FileDiff()) {
             holder.bind(currentList[position] as DateSelect)
     }
 
-    fun showSelector() {
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            for (item in payloads) {
+                if (item is Payload && holder is FileViewHolder) {
+                    holder.onBind(currentList[position] as FileModel)
+                }
+            }
+        }
+    }
 
+    private fun showSelector() {
+        for (i in currentList.indices) {
+            notifyItemChanged(i, Payload())
+        }
     }
 
     inner class FileViewHolder(
@@ -75,10 +104,12 @@ class FileAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(FileDiff()) {
             initEvents()
         }
 
-        fun onBind(fileModel: FileModel) {
+        var fileModel: FileModel? = null
 
-            setImage(fileModel)
-            showSelector(fileModel, isShowSelector)
+        fun onBind(item: FileModel) {
+            this.fileModel = item
+            setImage(item)
+            showSelector(item, isShowSelector)
         }
 
         private fun setImage(item: FileModel) {
@@ -89,6 +120,25 @@ class FileAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(FileDiff()) {
 
         private fun getError(): Int {
             return R.drawable.ic_image_not_found
+        }
+
+        fun showAllSelector() {
+            isShowSelector = true
+        }
+
+        fun onItemClick(isSelected: Boolean) {
+            if (isShowSelector) {
+                if (isSelected) {
+                    fileModel!!.isSelected = true
+                    onItemSelected(fileModel!!)
+                } else {
+                    fileModel!!.isSelected = false
+                    onItemUnselected(fileModel!!)
+                }
+            } else {
+                onItemClick(fileModel!!)
+            }
+            showSelector(fileModel!!, isShowSelector)
         }
     }
 

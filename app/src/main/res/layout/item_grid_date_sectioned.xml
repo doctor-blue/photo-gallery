@@ -3,18 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="@dimen/spacing_smlarge"
-    android:paddingTop="@dimen/spacing_large"
-    android:paddingEnd="@dimen/spacing_smlarge"
-    android:paddingBottom="@dimen/spacing_large">
+    android:padding="@dimen/space_screen_small">
 
     <TextView
         android:id="@+id/tv_title_section"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-        android:textColor="@color/grey_500"
-        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:fontFamily="@font/inter_semibold_600"
+        android:textSize="@dimen/text_size_16"
         tools:text="Section Title" />
 
 </LinearLayout>

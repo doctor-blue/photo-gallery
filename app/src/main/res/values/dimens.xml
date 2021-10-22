@@ -8,6 +8,7 @@
     <dimen name="img_padding">6dp</dimen>
     <dimen name="img_padding_large">8dp</dimen>
 
+    <dimen name="space_screen_super_small">8dp</dimen>
     <dimen name="space_screen_small">16dp</dimen>
     <dimen name="space_screen_normal">24dp</dimen>
     <dimen name="space_screen_large">32dp</dimen>

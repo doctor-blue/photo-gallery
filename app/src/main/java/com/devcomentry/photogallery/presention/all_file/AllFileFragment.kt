@@ -14,13 +14,14 @@ class AllFileFragment :
     BaseFragment<FragmentAllFileBinding>(R.layout.fragment_all_file) {
 
     private val fileAdapter: FileAdapter by lazy {
-        FileAdapter()
+        FileAdapter(onItemSelected, onItemUnselected,onItemClick)
     }
+
+    private var numFileSelected = 0
 
     override fun initEvents() {
         super.initEvents()
         PermissionUtils.checkPermission(requireContext(), {}, {})
-
     }
 
     override fun initControls(savedInstanceState: Bundle?) {
@@ -49,6 +50,20 @@ class AllFileFragment :
         }
 
     }
+
+    private val onItemSelected: (FileModel) -> Unit = {
+        numFileSelected++
+    }
+
+    private val onItemUnselected: (FileModel) -> Unit = {
+        numFileSelected--
+        if (numFileSelected == 0)
+            fileAdapter.isShowSelector = false
+    }
+    private val onItemClick: (FileModel) -> Unit = {
+
+    }
+
 
 //    private fun initComponent() {
 //        binding.rvAllFile.apply {

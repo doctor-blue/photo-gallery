@@ -13,8 +13,10 @@ class FileDiff : DiffUtil.ItemCallback<Any>() {
 
     @SuppressLint("DiffUtilEquals")
     override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-        return if ((oldItem is FileModel && newItem is FileModel) || (newItem is DateSelect && oldItem is DateSelect))
-            oldItem == newItem
+        return if (oldItem is FileModel && newItem is FileModel)
+            oldItem.name == newItem.name
+        else if (newItem is DateSelect && oldItem is DateSelect)
+            oldItem.month == newItem.month
         else false
     }
 }
