@@ -22,9 +22,9 @@ class AlbumAdapter(
 
         override fun onBind(item: FolderDetail) {
             binding.apply {
-                folderName.text = item.folder.name
-                folderSize.text = item.folder.size.toString()
-                Glide.with(context).load(item.imageFiles[0].uri).into(folderImage)
+                txtFolderName.text = item.folder.name
+                txtFolderSize.text = item.folder.size.toString()
+                Glide.with(context).load(item.imageFiles[0].uri).into(imgFile)
             }
         }
     }
