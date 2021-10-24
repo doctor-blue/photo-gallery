@@ -7,11 +7,8 @@ import com.devcomentry.photogallery.databinding.FragmentAllFileBinding
 import com.devcomentry.photogallery.domain.model.DateSelect
 import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.all_file.adapter.FileAdapter
-import com.devcomentry.photogallery.presention.all_file.adapter.Payload
 import com.devcomentry.photogallery.presention.common.BaseFragment
 import com.devcomentry.photogallery.presention.utils.PermissionUtils
-import com.devcomentry.photogallery.presention.utils.gone
-import com.devcomentry.photogallery.presention.utils.show
 
 class AllFileFragment :
     BaseFragment<FragmentAllFileBinding>(R.layout.fragment_all_file) {
@@ -68,14 +65,12 @@ class AllFileFragment :
             rvAllFile.adapter = fileAdapter
 
         }
-
     }
 
     override fun onResume() {
         super.onResume()
         unselectedAll()
     }
-
 
 //    private fun initComponent() {
 //        binding.rvAllFile.apply {
