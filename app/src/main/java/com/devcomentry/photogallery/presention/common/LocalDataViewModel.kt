@@ -19,6 +19,7 @@ import com.devcomentry.photogallery.domain.utils.DataState
 import com.devcomentry.photogallery.presention.utils.Constants
 import com.devcomentry.photogallery.presention.utils.Constants.formatter
 import com.devcomentry.photogallery.presention.utils.Constants.monthFormatter
+import com.devcomentry.photogallery.presention.utils.PathUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -46,30 +47,35 @@ class LocalDataViewModel @Inject constructor(
     private var getDataJob: Job? = null
 
 
-    private val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
+    private val sortOrder = "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
 
-    //    private val uri = MediaStore.Files.getContentUri("external")
-    private val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+    private val uri = MediaStore.Files.getContentUri("external")
+//    private val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
     private val projection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
         arrayOf(
-            MediaStore.Images.Media.RELATIVE_PATH,
-            MediaStore.Images.Media.DISPLAY_NAME,
-            MediaStore.Images.Media._ID,
-            MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-            MediaStore.Images.Media.BUCKET_ID,
-            MediaStore.Images.Media.SIZE,
-            MediaStore.Images.Media.DATE_TAKEN,
-        )
+            MediaStore.Files.FileColumns.MEDIA_TYPE,
+            MediaStore.Files.FileColumns.RELATIVE_PATH,
+            MediaStore.Files.FileColumns.DISPLAY_NAME,
+            MediaStore.Files.FileColumns._ID,
+            MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
+            MediaStore.Files.FileColumns.BUCKET_ID,
+            MediaStore.Files.FileColumns.SIZE,
+            MediaStore.Files.FileColumns.DATE_ADDED,
+            MediaStore.Files.FileColumns.DATE_TAKEN,
+
+            )
     else arrayOf(
-        MediaStore.Images.Media.DATA,
-        MediaStore.Images.Media.TITLE,
-        MediaStore.Images.Media._ID,
-        MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-        MediaStore.Images.Media.BUCKET_ID,
-        MediaStore.Images.Media.SIZE,
-        MediaStore.Images.Media.DATE_TAKEN,
-    )
+        MediaStore.Files.FileColumns.MEDIA_TYPE,
+        MediaStore.Files.FileColumns.DATA,
+        MediaStore.Files.FileColumns.TITLE,
+        MediaStore.Files.FileColumns._ID,
+        MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
+        MediaStore.Files.FileColumns.BUCKET_ID,
+        MediaStore.Files.FileColumns.SIZE,
+        MediaStore.Files.FileColumns.DATE_ADDED,
+        MediaStore.Files.FileColumns.DATE_TAKEN,
+        )
 
     private val _dataLocal = MutableLiveData(DataLocal())
     val dataLocal: LiveData<DataLocal>
@@ -141,7 +147,7 @@ class LocalDataViewModel @Inject constructor(
             application.contentResolver.query(
                 uri,
                 projection,
-                null,
+                selection,
                 null,
                 sortOrder
             )
@@ -149,46 +155,52 @@ class LocalDataViewModel @Inject constructor(
         cursor1.use {
             it?.let { cursor ->
                 while (it.moveToNext()) {
-
                     try {
                         val idMedia: Long =
-                            cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
+                            cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID))
                         val nameMedia: String =
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                                 cursor.getString(
                                     cursor.getColumnIndexOrThrow(
-                                        MediaStore.Images.Media.DISPLAY_NAME
+                                        MediaStore.Files.FileColumns.DISPLAY_NAME
                                     )
                                 )
                             } else {
                                 cursor.getString(
                                     cursor.getColumnIndexOrThrow(
-                                        MediaStore.Images.Media.TITLE
+                                        MediaStore.Files.FileColumns.TITLE
                                     )
                                 )
                             }
 
-                        val path = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            "sdcard/" + cursor.getString(
-                                cursor.getColumnIndexOrThrow(MediaStore.Images.Media.RELATIVE_PATH)
-                            ) + cursor.getString(
-                                cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
-                            )
-                        } else {
-                            cursor.getString(
-                                cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                            )
-                        }
+
 
                         val contentUri = Uri.withAppendedPath(uri, "" + idMedia)
                         val folderIdIndex: Int =
-                            cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_ID)
+                            cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_ID)
                         val folderNameIndex: Int =
-                            cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
+                            cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)
                         val folderId: Long = cursor.getLong(folderIdIndex)
-                        val timeModified =
-                            it.getString(it.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN))
+                        val timeModified = try {
+                            it.getString(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_TAKEN))
                                 .toLong()
+                        } catch (e: Exception) {
+                            it.getString(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_ADDED))
+                                .toLong() * 1000
+                        }
+
+                        val path = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                            "file:///mnt/sdcard/" + cursor.getString(
+//                                cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.RELATIVE_PATH)
+//                            ) + cursor.getString(
+//                                cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)
+//                            )
+                            PathUtil.getPath(application,contentUri)
+                        } else {
+                            cursor.getString(
+                                cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
+                            )
+                        }
 
                         var timeFile = "14/05/2021"
                         var monthFile = "05/2021"
@@ -221,7 +233,7 @@ class LocalDataViewModel @Inject constructor(
                                 timeFile = timeFile,
                                 timeCreated = timeModified,
                                 type = IS_IMAGE,
-                                size = it.getString(it.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE))
+                                size = it.getString(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE))
                                     .toFloat()
                             )
                         )
@@ -270,7 +282,7 @@ class LocalDataViewModel @Inject constructor(
                         }
 
                     } catch (ex: Exception) {
-                        Log.d("AllFileFragment2", "exception")
+                        Log.d("AllFileFragment2", "exception ${ex.message}")
                     }
                 }
 
