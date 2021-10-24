@@ -1,6 +1,7 @@
 package com.devcomentry.photogallery.presention.common
 
 import android.app.Application
+import android.content.ContentUris
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -49,24 +50,23 @@ class LocalDataViewModel @Inject constructor(
 
     private val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
 
-    private val uri = MediaStore.Files.getContentUri("external")
+    //    private val uri = MediaStore.Files.getContentUri("external")
+    private val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
     private val projection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
         arrayOf(
-            MediaStore.Files.FileColumns.MEDIA_TYPE,
-            MediaStore.Files.FileColumns.RELATIVE_PATH,
-            MediaStore.Files.FileColumns.DISPLAY_NAME,
-            MediaStore.Files.FileColumns._ID,
-            MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
-            MediaStore.Files.FileColumns.BUCKET_ID,
+            MediaStore.Images.Media.RELATIVE_PATH,
+            MediaStore.Images.Media.DISPLAY_NAME,
+            MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+            MediaStore.Images.Media.BUCKET_ID,
         )
     else arrayOf(
-        MediaStore.Files.FileColumns.MEDIA_TYPE,
-        MediaStore.Files.FileColumns.DATA,
-        MediaStore.Files.FileColumns.TITLE,
-        MediaStore.Files.FileColumns._ID,
-        MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
-        MediaStore.Files.FileColumns.BUCKET_ID,
+        MediaStore.Images.Media.DATA,
+        MediaStore.Images.Media.TITLE,
+        MediaStore.Images.Media._ID,
+        MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+        MediaStore.Images.Media.BUCKET_ID,
     )
 
     private val _dataLocal = MutableLiveData(DataLocal())
@@ -135,142 +135,197 @@ class LocalDataViewModel @Inject constructor(
         val selection = (MediaStore.Files.FileColumns.MEDIA_TYPE + "="
                 + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
 
-        val cursor =
-            application.contentResolver.query(
-                uri,
-                projection,
-                selection,
-                null,
-                sortOrder
+//        val cursor1 =
+//            application.contentResolver.query(
+//                uri,
+//                projection,
+//                null,
+//                null,
+//                sortOrder
+//            )
+        val imageProjection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            arrayOf(
+                MediaStore.Images.Media.RELATIVE_PATH,
+                MediaStore.Images.Media.DISPLAY_NAME,
+                MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.Media.BUCKET_ID,
             )
+        else arrayOf(
+            MediaStore.Images.Media.DATA,
+            MediaStore.Images.Media.TITLE,
+            MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+            MediaStore.Images.Media.BUCKET_ID,
+        )
 
-        if (cursor != null && cursor.count > 0) {
-
-            while (cursor.moveToNext()) {
-                try {
-                    val idMedia: Long =
-                        cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID))
-                    val nameMedia: String =
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            cursor.getString(
-                                cursor.getColumnIndexOrThrow(
-                                    MediaStore.Files.FileColumns.DISPLAY_NAME
-                                )
-                            )
-                        } else {
-                            cursor.getString(
-                                cursor.getColumnIndexOrThrow(
-                                    MediaStore.Files.FileColumns.TITLE
-                                )
-                            )
-                        }
-
-                    val path = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        "sdcard/" + cursor.getString(
-                            cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.RELATIVE_PATH)
-                        ) + cursor.getString(
-                            cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)
-                        )
-                    } else {
-                        cursor.getString(
-                            cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
-                        )
-                    }
-
-                    val contentUri = Uri.withAppendedPath(uri, "" + idMedia)
-                    val folderIdIndex: Int =
-                        cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_ID)
-                    val folderNameIndex: Int =
-                        cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)
-                    val folderId: Long = cursor.getLong(folderIdIndex)
-                    val timeModified = File(path).lastModified()
-
-                    var timeFile = "14/05/2021"
-                    var monthFile = "05/2021"
+        val imageSortOrder = "${MediaStore.Images.Media.DATE_TAKEN} DESC"
+        val cursor1 = application.contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            imageProjection,
+            null,
+            null,
+            imageSortOrder
+        )
+        cursor1.use {
+            it?.let { cursor ->
+                val idColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+                val nameColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
+                val sizeColumn =
+                    it.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
+                val dateColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_ID)
+                while (it.moveToNext()) {
+                    val id = it.getLong(idColumn)
+                    val name = it.getString(nameColumn)
+//                    val size = it.getString(sizeColumn)
+//                    val date = it.getString(dateColumn)
+//                    val contentUri = ContentUris.withAppendedId(
+//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//                        id
+//                    )
+                    // add the URI to the list
+                    // generate the thumbnail
+//                    val thumbnail = requireContext().contentResolver.loadThumbnail(contentUri, Size(480, 480), null)
+//                    Log.d("AllFileFragment2", "getImage: $id $name")
                     try {
-                        timeFile = formatter.format(timeModified)
-                        monthFile = monthFormatter.format(timeModified)
-                    } catch (e: Exception) {
-                    }
+                        Log.d("AllFileFragment2", "getImage: $id $name")
 
-                    if (File(path).exists() && File(path).length() > 5000) {
-                        if (!folders.containsKey(folderId)) {
-                            val folderName: String = cursor.getString(folderNameIndex)
-                            val folder = Folder(folderId, folderName, 1)
-                            folders[folderId] = folderName
-                            arrFolder.add(folder)
+                        val idMedia: Long =
+                            cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
+                        val nameMedia: String =
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                cursor.getString(
+                                    cursor.getColumnIndexOrThrow(
+                                        MediaStore.Images.Media.DISPLAY_NAME
+                                    )
+                                )
+                            } else {
+                                cursor.getString(
+                                    cursor.getColumnIndexOrThrow(
+                                        MediaStore.Images.Media.TITLE
+                                    )
+                                )
+                            }
+
+                        val path = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            "sdcard/" + cursor.getString(
+                                cursor.getColumnIndexOrThrow(MediaStore.Images.Media.RELATIVE_PATH)
+                            ) + cursor.getString(
+                                cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
+                            )
                         } else {
-                            arrFolder.find {
-                                it.id == folderId
-                            }?.let {
-                                it.size = it.size + 1
-                            }
+                            cursor.getString(
+                                cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                            )
                         }
 
-                        arrMedia.add(
-                            FileModel(
-                                id = idMedia,
-                                idFolder = folderId,
-                                name = nameMedia,
-                                uri = contentUri.toString(),
-                                path = path,
-                                timeFile = timeFile,
-                                timeCreated = timeModified,
-                                type = IS_IMAGE,
-                                size = File(path).length().toFloat()
-                            )
-                        )
+                        val contentUri = Uri.withAppendedPath(uri, "" + idMedia)
+                        val folderIdIndex: Int =
+                            cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_ID)
+                        val folderNameIndex: Int =
+                            cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
+                        val folderId: Long = cursor.getLong(folderIdIndex)
+                        val timeModified = File(path).lastModified()
 
-                        if (!dateMap.containsKey(timeFile)) {
-                            arrDate.add(
-                                DateSelect(
-                                    date = timeFile,
+                        var timeFile = "14/05/2021"
+                        var monthFile = "05/2021"
+                        try {
+                            timeFile = formatter.format(timeModified)
+                            monthFile = monthFormatter.format(timeModified)
+                        } catch (e: Exception) {
+                        }
+
+//                        if (File(path).exists()) {
+                            if (!folders.containsKey(folderId)) {
+                                val folderName: String = cursor.getString(folderNameIndex)
+                                val folder = Folder(folderId, folderName, 1)
+                                folders[folderId] = folderName
+                                arrFolder.add(folder)
+                            } else {
+                                arrFolder.find {
+                                    it.id == folderId
+                                }?.let {
+                                    it.size = it.size + 1
+                                }
+                            }
+
+                            arrMedia.add(
+                                FileModel(
+                                    id = idMedia,
+                                    idFolder = folderId,
+                                    name = nameMedia,
+                                    uri = contentUri.toString(),
+                                    path = path,
+                                    timeFile = timeFile,
+                                    timeCreated = timeModified,
                                     type = IS_IMAGE,
-                                    time = timeModified,
-                                    listIdFolder = arrayListOf(folderId),
-                                    month = monthFile
+                                    size = File(path).length().toFloat()
                                 )
                             )
-                            dateMap[timeFile] = timeFile
-                        }
 
-                        if (!monthMap.containsKey(monthFile)) {
-                            arrMonth.add(
-                                DateSelect(
-                                    date = timeFile,
-                                    type = IS_IMAGE,
-                                    time = timeModified,
-                                    listIdFolder = arrayListOf(folderId),
-                                    month = monthFile
+                            if (!dateMap.containsKey(timeFile)) {
+                                arrDate.add(
+                                    DateSelect(
+                                        date = timeFile,
+                                        type = IS_IMAGE,
+                                        time = timeModified,
+                                        listIdFolder = arrayListOf(folderId),
+                                        month = monthFile
+                                    )
                                 )
-                            )
-                            monthMap[monthFile] = monthFile
-                        }
-
-                        check++
-                        if (check == CHECK_ITEM_LOADING) {
-                            check = 0
-                            withContext(Dispatchers.Main) {
-                                _dataLocal.postValue(DataLocal(
-                                    file = arrMedia.sortedByDescending { it.timeCreated }
-                                        .toMutableList(),
-                                    folder = arrFolder.sortedBy { it.name }.toMutableList(),
-                                    listDate = arrDate.sortedByDescending { it.time }
-                                        .toMutableList(),
-                                    listMonth = arrMonth.sortedByDescending { it.time }
-                                        .toMutableList()
-                                ))
-
+                                dateMap[timeFile] = timeFile
                             }
-                        }
+
+                            if (!monthMap.containsKey(monthFile)) {
+                                arrMonth.add(
+                                    DateSelect(
+                                        date = timeFile,
+                                        type = IS_IMAGE,
+                                        time = timeModified,
+                                        listIdFolder = arrayListOf(folderId),
+                                        month = monthFile
+                                    )
+                                )
+                                monthMap[monthFile] = monthFile
+                            }
+
+                            check++
+                            if (check == CHECK_ITEM_LOADING) {
+                                check = 0
+                                withContext(Dispatchers.Main) {
+                                    _dataLocal.postValue(DataLocal(
+                                        file = arrMedia.sortedByDescending { it.timeCreated }
+                                            .toMutableList(),
+                                        folder = arrFolder.sortedBy { it.name }.toMutableList(),
+                                        listDate = arrDate.sortedByDescending { it.time }
+                                            .toMutableList(),
+                                        listMonth = arrMonth.sortedByDescending { it.time }
+                                            .toMutableList()
+                                    ))
+
+                                }
+                            }
+
+                    } catch (ex: Exception) {
+                        Log.d("AllFileFragment2", "exception")
+
                     }
-                } catch (ex: Exception) {
                 }
+
+            } ?: kotlin.run {
+                Log.e("TAG", "Cursor is null!")
             }
-            cursor.close()
-            folders.clear()
-            dateMap.clear()
         }
+//        if (cursor != null) {
+//
+//            while (cursor.moveToNext()) {
+////                Log.d("AllFileFragment", "getImages: ")
+//
+//            }
+//            cursor.close()
+//            folders.clear()
+//            dateMap.clear()
+//        }
 
         val data = DataLocal(
             file = arrMedia.sortedByDescending { it.timeCreated }
