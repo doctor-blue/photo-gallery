@@ -101,6 +101,7 @@ class FileAdapter(
             val current = currentList[i]
             if (current is FileModel) {
                 current.isSelected = false
+                notifyItemChanged(i, Payload())
             }
         }
         isShowSelector = false
@@ -146,7 +147,7 @@ class FileAdapter(
             showSelector(fileModel!!, isShowSelector)
         }
 
-        fun onItemSelected(isSelected: Boolean) {
+        private fun onItemSelected(isSelected: Boolean) {
             if (isSelected) {
                 fileModel!!.isSelected = true
                 onItemSelected(fileModel!!)
