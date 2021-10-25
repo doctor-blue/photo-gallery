@@ -16,7 +16,7 @@ import com.devcomentry.photogallery.databinding.DialogCancelDeleteBinding
 fun Context.showDialogDelete(
     lifecycle: Lifecycle,
     onCancel: () -> Unit = {},
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
     var isShow = false
     val dialog: Dialog
@@ -67,7 +67,8 @@ fun Context.showDialogDelete(
 fun Context.showDialogAskPermission(
     lifecycle: Lifecycle,
     message: Int = R.string.ask_storage_permission_message,
-    onConfirm: (dialog: Dialog) -> Unit
+    onPause: () -> Unit = {},
+    onConfirm: (dialog: Dialog) -> Unit,
 ) {
     var isShow = false
     val dialog: Dialog
@@ -91,16 +92,17 @@ fun Context.showDialogAskPermission(
     lifecycle.addObserver(LifecycleEventObserver { _, event ->
         when (event) {
             Lifecycle.Event.ON_PAUSE -> {
-                if (dialog.isShowing) {
-                    isShow = true
-                }
-                dialog.dismiss()
+//                if (dialog.isShowing) {
+//                    isShow = true
+//                }
+//                dialog.dismiss()
+                onPause()
             }
 
             Lifecycle.Event.ON_RESUME -> {
-                if (isShow) {
-                    dialog.show()
-                }
+//                if (isShow) {
+//                    dialog.show()
+//                }
             }
             else -> {
 
@@ -110,4 +112,5 @@ fun Context.showDialogAskPermission(
     if (!dialog.isShowing) {
         dialog.show()
     }
+    dialog.show()
 }
