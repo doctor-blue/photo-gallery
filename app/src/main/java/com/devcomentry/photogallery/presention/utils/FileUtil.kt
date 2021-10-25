@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 suspend fun performDeleteImage(
     images: List<FileModel>,
     context: Context,
-    onImageRemoved: (FileModel) -> Unit
+    onImageRemoved: () -> Unit
 ) {
     withContext(Dispatchers.IO) {
         try {
@@ -27,16 +27,20 @@ suspend fun performDeleteImage(
              * activity can use to prompt the user to grant permission to the item
              * so it can be either updated or deleted.
              */
-            for (image in images) {
-                context.contentResolver.delete(
-                    Uri.parse(image.uri),
-                    "${MediaStore.Images.Media._ID} = ?",
-                    arrayOf(image.id.toString())
-                )
-                withContext(Dispatchers.Main) {
-                    onImageRemoved(image)
+            for (i in images.indices) {
+                val image = images[i]
+                if (image.isSelected) {
+                    context.contentResolver.delete(
+                        Uri.parse(image.uri),
+                        "${MediaStore.Images.Media._ID} = ?",
+                        arrayOf(image.id.toString())
+                    )
                 }
             }
+            withContext(Dispatchers.Main) {
+                onImageRemoved()
+            }
+
         } catch (securityException: SecurityException) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val recoverableSecurityException =

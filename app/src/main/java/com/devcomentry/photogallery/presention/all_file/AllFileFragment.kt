@@ -24,9 +24,7 @@ class AllFileFragment :
 
     override fun initEvents() {
         super.initEvents()
-        PermissionUtils.checkPermission(requireContext(), {
-            localDataViewModel.refreshData()
-        }, {})
+        askStoragePermission()
 
         binding {
             toolbarSelected.setNavigationOnClickListener {

@@ -111,7 +111,7 @@ class LocalDataViewModel @Inject constructor(
     fun removeFileFromCache(file: FileModel) {
         viewModelScope.launch {
             fileUseCases.removeFile(file)
-            getData()
+            refreshData()
         }
     }
 
@@ -121,9 +121,9 @@ class LocalDataViewModel @Inject constructor(
             fileUseCases.getFileByType(IS_IMAGE).collect {
                 if (it is DataState.Success) {
                     val data = it.data
-                    data?.let { data ->
+                    data?.let {
                         _dataLocal.postValue(
-                            DataLocal(
+                            dataLocal.value?.copy(
                                 file = data.file,
                                 folder = data.folder,
                                 listDate = data.listDate,
@@ -138,8 +138,8 @@ class LocalDataViewModel @Inject constructor(
 
 
     private suspend fun getImages() = withContext(Dispatchers.Default) {
-        val arrMedia = ArrayList<FileModel>()
-        val arrFolder = ArrayList<Folder>()
+        val arrMedia = mutableListOf<FileModel>()
+        val arrFolder = mutableListOf<Folder>()
         val folders = HashMap<Long, String>()
         val arrDate = ArrayList<DateSelect>()
         val dateMap = HashMap<String, String>()
@@ -275,15 +275,19 @@ class LocalDataViewModel @Inject constructor(
                         if (check == CHECK_ITEM_LOADING) {
                             check = 0
                             withContext(Dispatchers.Main) {
-//                                _dataLocal.postValue(DataLocal(
-//                                    file = arrMedia.sortedByDescending { it.timeCreated }
-//                                        .toMutableList(),
-//                                    folder = arrFolder.sortedBy { it.name }.toMutableList(),
-//                                    listDate = arrDate.sortedByDescending { it.time }
-//                                        .toMutableList(),
-//                                    listMonth = arrMonth.sortedByDescending { it.time }
-//                                        .toMutableList()
-//                                ))
+
+                                _dataLocal.postValue(
+                                    DataLocal(
+                                        file = arrMedia.sortedByDescending { it.timeCreated }
+                                            .toMutableList(),
+                                        folder = arrFolder.sortedBy { it.name }.toMutableList(),
+                                        listDate = arrDate.sortedByDescending { it.time }
+                                            .toMutableList(),
+                                        listMonth = arrMonth.sortedByDescending { it.time }
+                                            .toMutableList()
+
+                                    )
+                                )
 
                             }
                         }
@@ -313,14 +317,14 @@ class LocalDataViewModel @Inject constructor(
         withContext(Dispatchers.Main) {
             Constants.isDataLoaded = true
             Log.d("DataLocal", "getImages1: ")
-//            _dataLocal.postValue(data)
+            _dataLocal.postValue(
+               data
+            )
         }
 
         fileUseCases.addFile(data.file)
 
         fileUseCases.addFolder(data.folder)
-        getDataFromCache()
-
     }
 
 

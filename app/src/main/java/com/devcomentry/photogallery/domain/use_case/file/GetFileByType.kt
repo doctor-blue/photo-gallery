@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.util.*
+import kotlin.collections.ArrayList
 
 class GetFileByType(
     private val fileRepository: FileRepository
@@ -20,11 +21,11 @@ class GetFileByType(
     operator fun invoke(type: Int): Flow<DataState<DataLocal>> = flow {
         emit(DataState.Loading())
         val files =
-            fileRepository.getFileByType(type)
-        val folders = fileRepository.getFolder()
+            fileRepository.getFileByType(type).toMutableList()
+        val folders = fileRepository.getFolder().toMutableList()
 
-        val dates = mutableListOf<DateSelect>()
-        val months = mutableListOf<DateSelect>()
+        val dates = ArrayList<DateSelect>()
+        val months = ArrayList<DateSelect>()
 
         val dateMap = HashMap<String, String>()
         val monthMap = HashMap<String, String>()

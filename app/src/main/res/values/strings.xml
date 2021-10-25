@@ -13,4 +13,11 @@
     <string name="settings">Settings</string>
     <string name="reload_from_disk">Reload from disk</string>
     <string name="share_images_to">"Share images to.."</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="are_you_sure_want_to_delete">Are you sure want to delete?</string>
+    <string name="alert">Alert!</string>
+    <string name="ask_storage_permission_message">Allow Photo Gallery access to show your photos</string>
+    <string name="allow">Allow</string>
 </resources>

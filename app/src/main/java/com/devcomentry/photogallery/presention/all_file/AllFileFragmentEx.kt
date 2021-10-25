@@ -1,16 +1,17 @@
 package com.devcomentry.photogallery.presention.all_file
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import android.view.MenuItem
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.domain.model.FileModel
-import com.devcomentry.photogallery.presention.utils.gone
-import com.devcomentry.photogallery.presention.utils.performDeleteImage
-import com.devcomentry.photogallery.presention.utils.show
+import com.devcomentry.photogallery.presention.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 val AllFileFragment.onItemSelected: (FileModel) -> Unit
     get() = {
@@ -71,13 +72,16 @@ fun AllFileFragment.onToolbarItemClick(item: MenuItem) {
 fun AllFileFragment.onSelectedToolbarItemClick(item: MenuItem) {
     when (item.itemId) {
         R.id.mnu_delete -> {
-            dataLocal?.let { dataLocal ->
-                CoroutineScope(Dispatchers.Main).launch {
-                    performDeleteImage(
-                        dataLocal.file.filter { it.isSelected },
-                        requireContext().applicationContext
-                    ) {
-                        localDataViewModel.removeFileFromCache(it)
+            requireContext().showDialogDelete(lifecycle, {}) {
+                dataLocal?.let { dataLocal ->
+                    CoroutineScope(Dispatchers.Main).launch {
+                        performDeleteImage(
+                            dataLocal.file,
+                            requireContext().applicationContext
+                        ) {
+                            unselectedAll()
+                            localDataViewModel.refreshData()
+                        }
                     }
                 }
             }
@@ -122,4 +126,31 @@ fun AllFileFragment.showEmptyLisLayout(isVisible: Boolean) {
         }
 
     }
+}
+
+fun AllFileFragment.askStoragePermission() {
+    askPermission {
+        requireContext().showDialogAskPermission(lifecycle) {
+            askPermission({
+                it.dismiss()
+            }) {
+                askPermission({
+                    it.dismiss()
+                }) {
+                    it.dismiss()
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", requireContext().packageName, null)
+                    intent.data = uri
+                    requireContext().startActivity(intent)
+                }
+            }
+        }
+    }
+}
+
+fun AllFileFragment.askPermission(onSuccess: () -> Unit = {}, onCancel: () -> Unit) {
+    PermissionUtils.checkPermission(requireContext(), {
+        localDataViewModel.refreshData()
+        onSuccess()
+    }, onCancel)
 }
