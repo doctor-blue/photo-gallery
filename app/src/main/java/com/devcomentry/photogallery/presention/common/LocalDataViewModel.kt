@@ -75,7 +75,7 @@ class LocalDataViewModel @Inject constructor(
         MediaStore.Files.FileColumns.SIZE,
         MediaStore.Files.FileColumns.DATE_ADDED,
         MediaStore.Files.FileColumns.DATE_TAKEN,
-        )
+    )
 
     private val _dataLocal = MutableLiveData(DataLocal())
     val dataLocal: LiveData<DataLocal>
@@ -108,6 +108,13 @@ class LocalDataViewModel @Inject constructor(
         }
     }
 
+    fun removeFileFromCache(file: FileModel) {
+        viewModelScope.launch {
+            fileUseCases.removeFile(file)
+            getData()
+        }
+    }
+
     private fun getDataFromCache() {
         getDataJob?.cancel()
         getDataJob = viewModelScope.launch(Dispatchers.IO) {
@@ -119,7 +126,8 @@ class LocalDataViewModel @Inject constructor(
                             DataLocal(
                                 file = data.file,
                                 folder = data.folder,
-                                listDate = data.listDate
+                                listDate = data.listDate,
+                                listMonth = data.listMonth,
                             )
                         )
                     }
@@ -174,7 +182,6 @@ class LocalDataViewModel @Inject constructor(
                             }
 
 
-
                         val contentUri = Uri.withAppendedPath(uri, "" + idMedia)
                         val folderIdIndex: Int =
                             cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_ID)
@@ -195,7 +202,7 @@ class LocalDataViewModel @Inject constructor(
 //                            ) + cursor.getString(
 //                                cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)
 //                            )
-                            PathUtil.getPath(application,contentUri)
+                            PathUtil.getPath(application, contentUri)
                         } else {
                             cursor.getString(
                                 cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
@@ -268,15 +275,15 @@ class LocalDataViewModel @Inject constructor(
                         if (check == CHECK_ITEM_LOADING) {
                             check = 0
                             withContext(Dispatchers.Main) {
-                                _dataLocal.postValue(DataLocal(
-                                    file = arrMedia.sortedByDescending { it.timeCreated }
-                                        .toMutableList(),
-                                    folder = arrFolder.sortedBy { it.name }.toMutableList(),
-                                    listDate = arrDate.sortedByDescending { it.time }
-                                        .toMutableList(),
-                                    listMonth = arrMonth.sortedByDescending { it.time }
-                                        .toMutableList()
-                                ))
+//                                _dataLocal.postValue(DataLocal(
+//                                    file = arrMedia.sortedByDescending { it.timeCreated }
+//                                        .toMutableList(),
+//                                    folder = arrFolder.sortedBy { it.name }.toMutableList(),
+//                                    listDate = arrDate.sortedByDescending { it.time }
+//                                        .toMutableList(),
+//                                    listMonth = arrMonth.sortedByDescending { it.time }
+//                                        .toMutableList()
+//                                ))
 
                             }
                         }
@@ -306,12 +313,13 @@ class LocalDataViewModel @Inject constructor(
         withContext(Dispatchers.Main) {
             Constants.isDataLoaded = true
             Log.d("DataLocal", "getImages1: ")
-            _dataLocal.postValue(data)
+//            _dataLocal.postValue(data)
         }
 
         fileUseCases.addFile(data.file)
 
         fileUseCases.addFolder(data.folder)
+        getDataFromCache()
 
     }
 

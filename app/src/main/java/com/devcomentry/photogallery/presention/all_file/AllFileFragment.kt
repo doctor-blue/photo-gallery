@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentAllFileBinding
+import com.devcomentry.photogallery.domain.model.DataLocal
 import com.devcomentry.photogallery.domain.model.DateSelect
 import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.all_file.adapter.FileAdapter
@@ -18,6 +19,8 @@ class AllFileFragment :
     }
 
     var numFileSelected = 0
+
+    var dataLocal: DataLocal? = null
 
     override fun initEvents() {
         super.initEvents()
@@ -34,6 +37,10 @@ class AllFileFragment :
                 onToolbarItemClick(it)
                 true
             }
+            toolbarSelected.setOnMenuItemClickListener {
+                onSelectedToolbarItemClick(it)
+                true
+            }
         }
     }
 
@@ -42,6 +49,7 @@ class AllFileFragment :
         super.initControls(savedInstanceState)
 
         localDataViewModel.dataLocal.observe(viewLifecycleOwner, { dataLocal ->
+            this.dataLocal = dataLocal
             val list: MutableList<Any> = mutableListOf()
             list.addAll(dataLocal.file)
             list.addAll(0, dataLocal.listMonth)
