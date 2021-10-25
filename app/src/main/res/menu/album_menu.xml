@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mnu_new_folder"
+        android:title="@string/new_folder" />
+    <item
+        android:id="@+id/mnu_reload_from_disk"
+        android:title="@string/reload_from_disk" />
+    <item
+        android:id="@+id/mnu_settings"
+        android:title="@string/settings" />
+    <item
+        android:id="@+id/mnu_favorites"
+        android:title="@string/favorites" />
+</menu>

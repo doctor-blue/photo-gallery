@@ -2,6 +2,7 @@ package com.devcomentry.photogallery.presention.albums
 
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentAlbumsBinding
@@ -24,7 +25,8 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_alb
                 folderDetails.add(
                     FolderDetail(
                         folder,
-                        dataLocal.file.filter { it.idFolder == folder.id })
+                        dataLocal.file.filter { it.idFolder == folder.id }
+                    )
                 )
             }
 
@@ -32,13 +34,18 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_alb
             showEmptyLisLayout(folderDetails.isEmpty())
             Log.d("Album", "initControls: ${dataLocal.folder.size}")
         }
+        binding {
+            rcvListAlbum.apply {
+                setHasFixedSize(true)
+                layoutManager = GridLayoutManager(requireContext(), 2)
+                adapter = albumAdapter
+            }
 
-        binding.rcvListAlbum.apply {
-            setHasFixedSize(true)
-            layoutManager = GridLayoutManager(requireContext(), 2)
-            adapter = albumAdapter
+            toolbar.setOnMenuItemClickListener {
+                onToolbarItemClick(it)
+                true
+            }
         }
-
     }
 
     override fun initEvents() {
@@ -64,4 +71,20 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_alb
         }
     }
 
+    private fun onToolbarItemClick(item: MenuItem) {
+        when (item.itemId) {
+            R.id.mnu_new_folder -> {
+
+            }
+            R.id.mnu_favorites -> {
+
+            }
+            R.id.mnu_reload_from_disk -> {
+                localDataViewModel.refreshData()
+            }
+            R.id.mnu_settings -> {
+
+            }
+        }
+    }
 }
