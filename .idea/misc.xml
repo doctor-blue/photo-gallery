@@ -31,6 +31,7 @@
         <entry key="app/src/main/res/layout/home_fragment.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/item_grid_date_sectioned.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/item_grid_image_sectioned.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/permission_fragment.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/menu/all_file_menu.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.2953125" />
         <entry key="app/src/main/res/menu/file_selected_menu.xml" value="0.2953125" />

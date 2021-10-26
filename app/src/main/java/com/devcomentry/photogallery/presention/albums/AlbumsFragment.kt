@@ -12,15 +12,15 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_albums) {
 
-    private val viewModel: LocalDataViewModel by viewModels()
+//    private val viewModel: LocalDataViewModel by viewModels()
     private val albumAdapter: AlbumAdapter by lazy { AlbumAdapter(requireContext(), onAlbumClick) }
 
     override fun initControls(savedInstanceState: Bundle?) {
         super.initControls(savedInstanceState)
 
-        viewModel.getData()
+//        viewModel.getData()
 
-        viewModel.dataLocal.observe(viewLifecycleOwner) { dataLocal ->
+        localDataViewModel.dataLocal.observe(viewLifecycleOwner) { dataLocal ->
             val folderDetails = mutableListOf<FolderDetail>()
             dataLocal.folder.forEach { folder ->
                 folderDetails.add(

@@ -15,10 +15,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private lateinit var navController: NavController
-    private var isInit = false
-    override fun onResume() {
-        super.onResume()
-        isInit = true
+    companion object{
+        var isInit = false
     }
 
     override fun initEvents() {

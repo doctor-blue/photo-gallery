@@ -1,12 +1,8 @@
 package com.devcomentry.photogallery.presention.all_file
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.provider.Settings
 import android.view.MenuItem
-import androidx.core.content.ContextCompat
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.utils.*
@@ -128,100 +124,4 @@ fun AllFileFragment.showEmptyLisLayout(isVisible: Boolean) {
         }
 
     }
-}
-
-fun AllFileFragment.askStoragePermission() {
-//    askPermissionForFirstTimes {
-//        requireContext().showDialogAskPermission(lifecycle,onPause = {
-//            countCheckPermission++
-//        }) {
-//            askPermission({
-//                it.dismiss()
-//            }) {
-//                if (countCheckPermission >= 5) {
-//                    it.dismiss()
-//                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-//                    val uri = Uri.fromParts("package", requireContext().packageName, null)
-//                    intent.data = uri
-//                    requireContext().startActivity(intent)
-//                }
-//            }
-//        }
-//    }
-    if (ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        requireContext().showDialogAskPermission(lifecycle) {
-            when {
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    // You can use the API that requires the permission.
-                    localDataViewModel.refreshData()
-                    it.dismiss()
-                }
-                shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
-                    // In an educational UI, explain to the user why your app requires this
-                    // permission for a specific feature to behave as expected. In this UI,
-                    // include a "cancel" or "no thanks" button that allows the user to
-                    // continue using your app without granting the permission.
-                    if (ContextCompat.checkSelfPermission(
-                            requireContext(),
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ) == PackageManager.PERMISSION_GRANTED
-                    ) {
-                        // You can use the API that requires the permission.
-                        localDataViewModel.refreshData()
-                        it.dismiss()
-                    } else {
-                        it.dismiss()
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        val uri = Uri.fromParts("package", requireContext().packageName, null)
-                        intent.data = uri
-                        requireContext().startActivity(intent)
-                    }
-
-                }
-                else -> {
-                    // You can directly ask for the permission.
-                    // The registered ActivityResultCallback gets the result of this request.
-                    requestPermissionLauncher.launch(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    )
-
-                }
-            }
-
-        }
-
-    }
-}
-
-fun AllFileFragment.askPermissionForFirstTimes(onSuccess: () -> Unit = {}, onCancel: () -> Unit) {
-    PermissionUtils.checkPermission(requireContext(), {
-        localDataViewModel.refreshData()
-        onSuccess()
-    }, onCancel)
-}
-
-fun AllFileFragment.askPermission(onSuccess: () -> Unit = {}, onCancel: () -> Unit) {
-    PermissionUtils.checkPermission(requireContext(), {
-        localDataViewModel.refreshData()
-        onSuccess()
-    }, {
-//        countCheckPermission++
-//        if (countCheckPermission >= 5) {
-//            dialog.dismiss()
-//            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-//            val uri = Uri.fromParts("package", requireContext().packageName, null)
-//            intent.data = uri
-//            requireContext().startActivity(intent)
-//        }else{
-//            askPermission(onSuccess, dialog)
-//        }
-        onCancel()
-    })
 }
