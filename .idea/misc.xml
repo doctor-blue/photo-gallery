@@ -27,7 +27,10 @@
         <entry key="app/src/main/res/layout/file_item.xml" value="0.13346713497240342" />
         <entry key="app/src/main/res/layout/fragment_albums.xml" value="0.28125" />
         <entry key="app/src/main/res/layout/fragment_all_file.xml" value="0.2953125" />
+        <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/fragment_full_file.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.2953125" />
+        <entry key="app/src/main/res/layout/full_image_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/home_fragment.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/item_grid_date_sectioned.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/item_grid_image_sectioned.xml" value="0.3098958333333333" />

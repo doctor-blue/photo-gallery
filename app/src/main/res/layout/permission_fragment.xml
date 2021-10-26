@@ -12,15 +12,13 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/tvDisconnect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_screen_normal"
-            android:fontFamily="@font/inter_semibold_600"
-            android:text="@string/alert"
-            android:textColor="@color/text_light"
-            android:textSize="@dimen/text_size_16" />
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:src="@drawable/ic_camera"
+            android:alpha="0.5"
+            />
 
         <TextView
             android:id="@+id/tvContent"
