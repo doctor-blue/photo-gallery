@@ -1,10 +1,15 @@
 package com.devcomentry.photogallery.presention.all_file
 
+import android.content.Intent
+import android.net.Uri
 import android.view.MenuItem
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.domain.model.FileModel
-import com.devcomentry.photogallery.presention.utils.gone
-import com.devcomentry.photogallery.presention.utils.show
+import com.devcomentry.photogallery.presention.utils.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 val AllFileFragment.onItemSelected: (FileModel) -> Unit
     get() = {
@@ -50,13 +55,55 @@ fun AllFileFragment.onToolbarItemClick(item: MenuItem) {
             fileAdapter.isShowSelector = true
             updateFileSelectedToolbar(true)
         }
-        R.id.mnu_favorites -> {
-
-        }
+//        R.id.mnu_favorites -> {
+//
+//        }
         R.id.mnu_reload_from_disk -> {
             localDataViewModel.refreshData()
         }
         R.id.mnu_settings -> {
+
+        }
+    }
+}
+
+fun AllFileFragment.onSelectedToolbarItemClick(item: MenuItem) {
+    when (item.itemId) {
+        R.id.mnu_delete -> {
+            requireContext().showDialogDelete(lifecycle, {}) {
+                dataLocal?.let { dataLocal ->
+                    CoroutineScope(Dispatchers.Main).launch {
+                        performDeleteImage(
+                            dataLocal.file,
+                            requireContext().applicationContext
+                        ) {
+                            unselectedAll()
+                            localDataViewModel.refreshData()
+                        }
+                    }
+                }
+            }
+        }
+//        R.id.mnu_favorites -> {
+//
+//        }
+        R.id.mnu_share -> {
+            dataLocal?.let { dataLocal ->
+                val imageUris = arrayListOf<Uri>()
+                imageUris.addAll(dataLocal.file.filter { it.isSelected }.map { Uri.parse(it.uri) })
+
+                val shareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND_MULTIPLE
+                    putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris)
+                    type = "image/*"
+                }
+                startActivity(
+                    Intent.createChooser(
+                        shareIntent,
+                        requireContext().getString(R.string.share_images_to)
+                    )
+                )
+            }
 
         }
     }

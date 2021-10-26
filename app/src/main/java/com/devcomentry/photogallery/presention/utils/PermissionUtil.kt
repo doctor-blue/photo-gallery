@@ -85,7 +85,7 @@ object PermissionUtils {
 //        return listPermission
 //    }
 
-    fun checkPermission(context: Context, onSuccess: () -> Unit, onCancel: () -> Unit) {
+    fun checkPermission(context: Context, onSuccess: () -> Unit={}, onCancel: () -> Unit={}) {
         Dexter.withContext(context)
             .withPermissions(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
