@@ -7,7 +7,11 @@
     <fragment
         android:id="@+id/albumsFragment"
         android:name="com.devcomentry.photogallery.presention.albums.AlbumsFragment"
-        android:label="AlbumsFragment" />
+        android:label="AlbumsFragment" >
+        <action
+            android:id="@+id/action_albumsFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/allFileFragment"
         android:name="com.devcomentry.photogallery.presention.all_file.AllFileFragment"
@@ -15,6 +19,9 @@
         <action
             android:id="@+id/action_allFileFragment_to_albumsFragment"
             app:destination="@id/albumsFragment" />
+        <action
+            android:id="@+id/action_allFileFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -44,4 +51,8 @@
             app:popUpTo="@+id/nav_graph_main"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.devcomentry.photogallery.presention.settings.SettingFragment"
+        android:label="SettingFragment" />
 </navigation>

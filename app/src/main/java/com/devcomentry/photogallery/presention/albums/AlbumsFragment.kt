@@ -3,6 +3,7 @@ package com.devcomentry.photogallery.presention.albums
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentAlbumsBinding
@@ -15,17 +16,20 @@ import dagger.hilt.android.AndroidEntryPoint
 class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_albums) {
 
     private val albumAdapter: AlbumAdapter by lazy { AlbumAdapter(requireContext(), onAlbumClick) }
+    private var folderSize: Float = 0f
 
     override fun initControls(savedInstanceState: Bundle?) {
         super.initControls(savedInstanceState)
 
         localDataViewModel.dataLocal.observe(viewLifecycleOwner) { dataLocal ->
             val folderDetails = mutableListOf<FolderDetail>()
+            folderSize = 0f
             dataLocal.folder.forEach { folder ->
                 folderDetails.add(
                     FolderDetail(
                         folder,
-                        dataLocal.file.filter { it.idFolder == folder.id }
+                        dataLocal.file.filter { it.idFolder == folder.id },
+                        0f
                     )
                 )
             }
@@ -76,14 +80,12 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_alb
             R.id.mnu_new_folder -> {
 
             }
-            R.id.mnu_favorites -> {
-
-            }
             R.id.mnu_reload_from_disk -> {
                 localDataViewModel.refreshData()
             }
             R.id.mnu_settings -> {
-
+                safeNav(R.id.albumsFragment, R.id.settingFragment)
+                Toast.makeText(context, "Setting", Toast.LENGTH_SHORT).show()
             }
         }
     }

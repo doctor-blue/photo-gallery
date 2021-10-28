@@ -19,17 +19,17 @@
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="0dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:elevation="0dp">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
-                    app:title="@string/albums"
-                    app:layout_scrollFlags="scroll|enterAlways|snap"
-                    app:titleTextColor="@color/text_light"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:menu="@menu/album_menu"/>
+                    app:layout_scrollFlags="scroll|enterAlways|snap"
+                    app:menu="@menu/album_menu"
+                    app:title="@string/app_name"
+                    app:titleTextColor="@color/text_light" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,7 +37,10 @@
                 android:id="@+id/rcv_list_album"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                android:layout_marginTop="@dimen/space_screen_small"
+                android:paddingHorizontal="@dimen/space_screen_super_small"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:listitem="@layout/album_folder_item" />
 
             <LinearLayout
                 android:id="@+id/ll_list_empty"

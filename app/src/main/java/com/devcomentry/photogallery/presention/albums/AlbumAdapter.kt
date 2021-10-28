@@ -23,8 +23,12 @@ class AlbumAdapter(
         override fun onBind(item: FolderDetail) {
             binding.apply {
                 txtFolderName.text = item.folder.name
-                txtFolderSize.text = item.folder.size.toString()
+                if (item.imageFiles.size > 1)
+                    txtFileCount.text = item.imageFiles.size.toString() + " files"
+                else
+                    txtFileCount.text = item.imageFiles.size.toString() + " file"
                 Glide.with(context).load(item.imageFiles[0].uri).into(imgFile)
+                txtFolderSize.text = item.folderSize.toString() + " MB"
             }
         }
     }
