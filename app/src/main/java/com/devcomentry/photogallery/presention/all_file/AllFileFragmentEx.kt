@@ -62,7 +62,7 @@ fun AllFileFragment.onToolbarItemClick(item: MenuItem) {
             localDataViewModel.refreshData()
         }
         R.id.mnu_settings -> {
-
+            safeNav(R.id.allFileFragment, AllFileFragmentDirections.actionAllFileFragmentToSettingFragment())
         }
     }
 }
