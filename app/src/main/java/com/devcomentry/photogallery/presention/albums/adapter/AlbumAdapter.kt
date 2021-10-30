@@ -1,4 +1,4 @@
-package com.devcomentry.photogallery.presention.albums
+package com.devcomentry.photogallery.presention.albums.adapter
 
 import android.content.Context
 import android.view.ViewGroup
@@ -7,6 +7,7 @@ import com.devcomentry.moonlight.binding.BindingListAdapter
 import com.devcomentry.moonlight.binding.BindingViewHolder
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.AlbumFolderItemBinding
+import com.devcomentry.photogallery.presention.albums.FolderDetail
 
 class AlbumAdapter(
     private val context: Context,
@@ -24,11 +25,12 @@ class AlbumAdapter(
             binding.apply {
                 txtFolderName.text = item.folder.name
                 if (item.imageFiles.size > 1)
-                    txtFileCount.text = item.imageFiles.size.toString() + " files"
+                    txtFileCount.text = (item.imageFiles.size.toString() + " files")
                 else
-                    txtFileCount.text = item.imageFiles.size.toString() + " file"
+                    txtFileCount.text = (item.imageFiles.size.toString() + " file")
                 Glide.with(context).load(item.imageFiles[0].uri).into(imgFile)
-                txtFolderSize.text = item.folderSize.toString() + " MB"
+                // >1MB dv = MB, <1MB dv = KB
+                txtFolderSize.text = (item.folderSize.toString() + " MB")
             }
         }
     }
