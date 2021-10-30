@@ -11,4 +11,9 @@
         android:icon="@drawable/ic_baseline_share"
         android:title="@string/share"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/mnu_new_folder"
+        android:title="@string/new_folder"
+        />
 </menu>
