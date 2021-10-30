@@ -14,40 +14,66 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/space_screen_small">
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/blur_view_top"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_gradient_top_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/txt_date"/>
+
+        <View
+            android:id="@+id/blur_view_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_gradient_bottom_top"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imv_detail"
+            />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_screen_small"
             android:src="@drawable/ic_baseline_arrow_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/txt_name"
-            app:layout_constraintBottom_toBottomOf="@id/txt_date"/>
+            app:layout_constraintBottom_toBottomOf="@id/txt_date"
+            app:layout_constraintStart_toStartOf="@id/blur_view_top"
+            app:layout_constraintTop_toTopOf="@id/txt_name" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imv_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_screen_small"
             android:src="@drawable/ic_baseline_delete"
             android:tint="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/blur_view_bottom"
             app:layout_constraintEnd_toStartOf="@+id/imv_share"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/txt_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_screen_small"
+            android:layout_marginTop="@dimen/space_screen_small"
             android:layout_marginEnd="@dimen/space_screen_small"
             android:fontFamily="@font/inter_bold_700"
+            android:gravity="center"
+            android:maxLines="1"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/imv_back"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/blur_view_top"
             tools:text="@string/app_name" />
 
         <TextView
@@ -66,9 +92,10 @@
             android:id="@+id/imv_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_screen_small"
             android:src="@drawable/ic_baseline_share"
             android:tint="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/blur_view_bottom"
             app:layout_constraintEnd_toStartOf="@+id/imv_detail"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/imv_delete" />
@@ -77,8 +104,9 @@
             android:id="@+id/imv_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_screen_small"
             android:src="@drawable/ic_baseline_report"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/blur_view_bottom"
             app:layout_constraintEnd_toStartOf="@id/imv_lock"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/imv_share" />
@@ -87,8 +115,9 @@
             android:id="@+id/imv_lock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_screen_small"
             android:src="@drawable/ic_baseline_lock"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/blur_view_bottom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/imv_detail" />

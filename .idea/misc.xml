@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/compose-model-1634199176210.xml" value="0.16111111111111112" />
+        <entry key="app/src/main/res/drawable/bg_file_item_selected.xml" value="0.27685185185185185" />
+        <entry key="app/src/main/res/drawable/bg_gradient_bottom_top.xml" value="0.27685185185185185" />
+        <entry key="app/src/main/res/drawable/bg_gradient_top_bottom.xml" value="0.27685185185185185" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/fragment_albums.xml" value="0.28125" />
         <entry key="app/src/main/res/layout/fragment_all_file.xml" value="0.2953125" />

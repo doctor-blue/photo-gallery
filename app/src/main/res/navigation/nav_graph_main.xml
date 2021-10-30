@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_albumsFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_albumsFragment_to_fullFileFragment"
+            app:destination="@id/fullFileFragment" />
     </fragment>
     <fragment
         android:id="@+id/allFileFragment"
@@ -22,6 +25,10 @@
         <action
             android:id="@+id/action_allFileFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_allFileFragment_to_fullFileFragment"
+            app:destination="@id/fullFileFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -55,4 +62,17 @@
         android:id="@+id/settingFragment"
         android:name="com.devcomentry.photogallery.presention.settings.SettingFragment"
         android:label="SettingFragment" />
+    <fragment
+        android:id="@+id/fullFileFragment"
+        android:name="com.devcomentry.photogallery.presention.photo_detail.FullFileFragment"
+        android:label="FullFileFragment" >
+        <argument
+            android:name="idFile"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="idFolder"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
 </navigation>

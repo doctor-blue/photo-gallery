@@ -27,7 +27,10 @@ val AllFileFragment.onItemUnselected: (FileModel) -> Unit
 
 val AllFileFragment.onItemClick: (FileModel) -> Unit
     get() = {
-
+        safeNav(
+            R.id.allFileFragment,
+            AllFileFragmentDirections.actionAllFileFragmentToFullFileFragment(it.id)
+        )
     }
 
 fun AllFileFragment.unselectedAll() {
@@ -62,7 +65,10 @@ fun AllFileFragment.onToolbarItemClick(item: MenuItem) {
             localDataViewModel.refreshData()
         }
         R.id.mnu_settings -> {
-            safeNav(R.id.allFileFragment, AllFileFragmentDirections.actionAllFileFragmentToSettingFragment())
+            safeNav(
+                R.id.allFileFragment,
+                AllFileFragmentDirections.actionAllFileFragmentToSettingFragment()
+            )
         }
     }
 }
