@@ -1,27 +1,27 @@
 package com.devcomentry.photogallery.presention.file_list
 
-import android.content.Intent
 import android.net.Uri
 import android.view.MenuItem
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.utils.gone
+import com.devcomentry.photogallery.presention.utils.shareImageTo
 import com.devcomentry.photogallery.presention.utils.show
 import com.devcomentry.photogallery.presention.utils.showDialogDelete
 
 
 val FileListFragment.onItemSelected: (FileModel) -> Unit
     get() = {
-        numFileSelected++
+//        numFileSelected++
         updateFileSelectedToolbar()
     }
 
 val FileListFragment.onItemUnselected: (FileModel) -> Unit
     get() = {
-        numFileSelected--
-        if (numFileSelected == 0)
-            fileAdapter.isShowSelector = false
+//        numFileSelected--
         updateFileSelectedToolbar()
+        if (numFileSelected - 1 <= 0)
+            fileAdapter.isShowSelector = false
     }
 
 val FileListFragment.onItemClick: (FileModel) -> Unit
@@ -34,19 +34,22 @@ val FileListFragment.onItemClick: (FileModel) -> Unit
 
 fun FileListFragment.unselectedAll() {
     fileAdapter.unselectedAll()
-    numFileSelected = 0
     updateFileSelectedToolbar()
 }
 
 
 fun FileListFragment.updateFileSelectedToolbar(isShow: Boolean = false) {
     binding {
+        numFileSelected = fileAdapter.currentList.filterIsInstance<FileModel>()
+            .filter { it.isSelected }.size
+
         toolbarSelected.title =
             if (numFileSelected > 0) numFileSelected.toString() else requireContext().getString(R.string.select_items)
         if (numFileSelected > 0 || isShow) {
             ablSelected.show()
         } else {
             ablSelected.gone()
+            fileAdapter.unselectedAll()
         }
     }
 }
@@ -69,34 +72,28 @@ fun FileListFragment.onToolbarItemClick(item: MenuItem) {
 fun FileListFragment.onSelectedToolbarItemClick(item: MenuItem) {
     when (item.itemId) {
         R.id.mnu_delete -> {
-            dataLocal?.let {
-
-            }
-            requireContext().showDialogDelete(lifecycle, dataLocal, onCancel = {}) {
-                unselectedAll()
-                localDataViewModel.refreshData()
-            }
+            if (numFileSelected > 0)
+                requireContext().showDialogDelete(lifecycle, dataLocal, onCancel = {}) {
+                    unselectedAll()
+                    localDataViewModel.refreshData()
+                }
         }
 //        R.id.mnu_favorites -> {
 //
 //        }
         R.id.mnu_share -> {
-            dataLocal?.let { dataLocal ->
-                val imageUris = arrayListOf<Uri>()
-                imageUris.addAll(dataLocal.file.filter { it.isSelected }.map { Uri.parse(it.uri) })
-
-                val shareIntent = Intent().apply {
-                    action = Intent.ACTION_SEND_MULTIPLE
-                    putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris)
-                    type = "image/*"
+            if (numFileSelected > 0)
+                dataLocal?.let { dataLocal ->
+                    val imageUris = arrayListOf<Uri>()
+                    imageUris.addAll(dataLocal.file.filter { it.isSelected }
+                        .map { Uri.parse(it.uri) })
+                    shareImageTo(imageUris, requireContext())
                 }
-                startActivity(
-                    Intent.createChooser(
-                        shareIntent,
-                        requireContext().getString(R.string.share_images_to)
-                    )
-                )
-            }
+
+        }
+        R.id.mnu_select_all -> {
+            fileAdapter.selectAll()
+            updateFileSelectedToolbar()
 
         }
     }

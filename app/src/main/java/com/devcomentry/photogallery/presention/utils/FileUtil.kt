@@ -2,9 +2,12 @@ package com.devcomentry.photogallery.presention.utils
 
 import android.app.RecoverableSecurityException
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import androidx.core.content.ContextCompat.startActivity
+import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.domain.model.FileModel
 import dagger.hilt.android.internal.Contexts.getApplication
 import kotlinx.coroutines.Dispatchers
@@ -55,4 +58,18 @@ suspend fun performDeleteImage(
             }
         }
     }
+}
+
+fun shareImageTo(imageUri: ArrayList<Uri>, context: Context) {
+    val shareIntent = Intent().apply {
+        action = Intent.ACTION_SEND_MULTIPLE
+        putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUri)
+        type = "image/*"
+    }
+    context.startActivity(
+        Intent.createChooser(
+            shareIntent,
+            context.getString(R.string.share_images_to)
+        )
+    )
 }

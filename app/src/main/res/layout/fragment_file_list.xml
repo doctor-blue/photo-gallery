@@ -32,7 +32,9 @@
                     app:layout_scrollFlags="scroll|enterAlways|snap"
                     app:title="@string/app_name"
                     app:titleTextColor="@color/text_light"
+                    app:subtitleTextColor="@color/text_light"
                     app:menu="@menu/all_file_menu"
+                    app:navigationIcon="@drawable/ic_arrow_back"
                     />
 
             </com.google.android.material.appbar.AppBarLayout>

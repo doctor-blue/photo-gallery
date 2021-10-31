@@ -106,6 +106,16 @@ class FileAdapter(
         }
         isShowSelector = false
     }
+    fun selectAll() {
+        for (i in currentList.indices) {
+            val current = currentList[i]
+            if (current is FileModel) {
+                current.isSelected = true
+                notifyItemChanged(i, Payload())
+            }
+        }
+        isShowSelector = true
+    }
 
     inner class FileViewHolder(
         val binding: FileItemBinding,

@@ -11,9 +11,16 @@
         android:icon="@drawable/ic_baseline_share"
         android:title="@string/share"
         app:showAsAction="always"/>
-
     <item
-        android:id="@+id/mnu_new_folder"
-        android:title="@string/new_folder"
+        android:id="@+id/mnu_select_all"
+        android:title="@string/select_all"
+        />
+    <item
+        android:id="@+id/mnu_move_folder"
+        android:title="@string/move_to_folder"
+        />
+    <item
+        android:id="@+id/mnu_copy_folder"
+        android:title="@string/copy_to_folder"
         />
 </menu>

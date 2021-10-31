@@ -27,6 +27,9 @@
     <string name="give_feedback">Give us feedback</string>
     <string name="rate_us">Rate us</string>
     <string name="about_us">About us</string>
+    <string name="select_all">Select all</string>
+    <string name="move_to_folder">Move to folder</string>
+    <string name="copy_to_folder">Copy to folder</string>
 
     <string-array name="memory_unit">
         <item> KB</item>

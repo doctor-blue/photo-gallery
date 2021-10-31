@@ -35,6 +35,10 @@ class FileListFragment : BaseFragment<FragmentFileListBinding>(R.layout.fragment
                 onToolbarItemClick(it)
                 true
             }
+            toolbar.setNavigationOnClickListener {
+                navController.popBackStack()
+            }
+
             toolbarSelected.setOnMenuItemClickListener {
                 onSelectedToolbarItemClick(it)
                 true
