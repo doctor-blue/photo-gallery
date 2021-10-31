@@ -1,13 +1,14 @@
 package com.devcomentry.photogallery.presention.all_file
 
+import android.content.IntentSender
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.view.MenuItem
+import androidx.activity.result.IntentSenderRequest
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.domain.model.FileModel
-import com.devcomentry.photogallery.presention.utils.gone
-import com.devcomentry.photogallery.presention.utils.shareImageTo
-import com.devcomentry.photogallery.presention.utils.show
-import com.devcomentry.photogallery.presention.utils.showDialogDelete
+import com.devcomentry.photogallery.presention.utils.*
 
 
 val AllFileFragment.onItemSelected: (FileModel) -> Unit
@@ -78,11 +79,29 @@ fun AllFileFragment.onToolbarItemClick(item: MenuItem) {
 fun AllFileFragment.onSelectedToolbarItemClick(item: MenuItem) {
     when (item.itemId) {
         R.id.mnu_delete -> {
-            if (numFileSelected > 0)
-                requireContext().showDialogDelete(lifecycle, dataLocal, onCancel = {}) {
-                    unselectedAll()
-                    localDataViewModel.refreshData()
-                }
+            if (numFileSelected > 0) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val sender = MediaStore.createDeleteRequest(
+                        requireContext().contentResolver,
+                        dataLocal?.file?.filter { it.isSelected }?.map { Uri.parse(it.uri) }
+                            ?: listOf()
+                    ).intentSender
+                    try {
+                        intentSenderLauncher.launch(
+                            IntentSenderRequest.Builder(sender).build()
+                        )
+                    } catch (e: IntentSender.SendIntentException) {
+                    }
+
+                } else
+                    requireContext().showDialogDelete(lifecycle, dataLocal, onCancel = {
+                        requireContext().showToast(R.string.could_not_deleted_file_mess)
+                    }) {
+                        requireContext().showToast(R.string.file_deleted_mess)
+                        unselectedAll()
+                        localDataViewModel.refreshData()
+                    }
+            }
         }
 //        R.id.mnu_favorites -> {
 //

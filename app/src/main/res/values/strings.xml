@@ -36,4 +36,7 @@
         <item> MB</item>
         <item> GB</item>
     </string-array>
+    <string name="file_deleted_mess">File deleted successfully</string>
+    <string name="could_not_deleted_file_mess">File couldn\'t be deleted</string>
+
 </resources>

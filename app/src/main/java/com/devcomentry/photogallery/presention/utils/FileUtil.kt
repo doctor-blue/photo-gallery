@@ -12,6 +12,13 @@ import com.devcomentry.photogallery.domain.model.FileModel
 import dagger.hilt.android.internal.Contexts.getApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import android.content.IntentSender.SendIntentException
+
+import androidx.core.app.ActivityCompat.startIntentSenderForResult
+
+import android.app.PendingIntent
+import androidx.core.app.ActivityCompat
+
 
 suspend fun performDeleteImage(
     images: List<FileModel>,
@@ -30,6 +37,7 @@ suspend fun performDeleteImage(
              * activity can use to prompt the user to grant permission to the item
              * so it can be either updated or deleted.
              */
+
             for (i in images.indices) {
                 val image = images[i]
                 if (image.isSelected) {

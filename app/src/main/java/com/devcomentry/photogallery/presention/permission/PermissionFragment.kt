@@ -12,6 +12,7 @@ import com.devcomentry.photogallery.databinding.PermissionFragmentBinding
 import com.devcomentry.photogallery.presention.MainActivity
 import com.devcomentry.photogallery.presention.common.BaseFragment
 import com.devcomentry.photogallery.presention.utils.PermissionUtils
+import com.devcomentry.photogallery.presention.utils.getStoragePermission
 import com.devcomentry.photogallery.presention.utils.setPreventDoubleClick
 
 class PermissionFragment : BaseFragment<PermissionFragmentBinding>(R.layout.permission_fragment) {
@@ -19,7 +20,8 @@ class PermissionFragment : BaseFragment<PermissionFragmentBinding>(R.layout.perm
         super.onResume()
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                getStoragePermission()
+
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             MainActivity.isInit = true
@@ -40,24 +42,26 @@ class PermissionFragment : BaseFragment<PermissionFragmentBinding>(R.layout.perm
     private fun askStoragePermission() {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                getStoragePermission()
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             when {
                 ContextCompat.checkSelfPermission(
                     requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    getStoragePermission()
+
                 ) == PackageManager.PERMISSION_GRANTED -> {
                     // You can use the API that requires the permission.
                 }
-                shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
+                shouldShowRequestPermissionRationale(getStoragePermission()) -> {
                     // In an educational UI, explain to the user why your app requires this
                     // permission for a specific feature to behave as expected. In this UI,
                     // include a "cancel" or "no thanks" button that allows the user to
                     // continue using your app without granting the permission.
                     if (ContextCompat.checkSelfPermission(
                             requireContext(),
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            getStoragePermission()
+
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
                         // You can use the API that requires the permission.

@@ -182,7 +182,7 @@ class LocalDataViewModel @Inject constructor(
                             }
 
 
-                        val contentUri = Uri.withAppendedPath(uri, "" + idMedia)
+                        val contentUri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + idMedia)
                         val folderIdIndex: Int =
                             cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_ID)
                         val folderNameIndex: Int =

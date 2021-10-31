@@ -1,6 +1,5 @@
 package com.devcomentry.photogallery.presention.splash
 
-import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.content.ContextCompat
@@ -8,6 +7,7 @@ import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentSplashBinding
 import com.devcomentry.photogallery.presention.MainActivity
 import com.devcomentry.photogallery.presention.common.BaseFragment
+import com.devcomentry.photogallery.presention.utils.getStoragePermission
 import kotlinx.coroutines.*
 
 class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_splash) {
@@ -20,7 +20,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_spl
             withContext(Dispatchers.Main) {
                 if (ContextCompat.checkSelfPermission(
                         requireContext(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        getStoragePermission()
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
                     safeNav(

@@ -2,6 +2,7 @@ package com.devcomentry.photogallery.presention.utils
 
 import android.Manifest
 import android.content.Context
+import android.os.Build
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -85,7 +86,7 @@ object PermissionUtils {
 //        return listPermission
 //    }
 
-    fun checkPermission(context: Context, onSuccess: () -> Unit={}, onCancel: () -> Unit={}) {
+    fun checkPermission(context: Context, onSuccess: () -> Unit = {}, onCancel: () -> Unit = {}) {
         Dexter.withContext(context)
             .withPermissions(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -189,3 +190,6 @@ object PermissionUtils {
 //        return check
 //    }
 }
+
+fun getStoragePermission() =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) Manifest.permission.READ_EXTERNAL_STORAGE else Manifest.permission.WRITE_EXTERNAL_STORAGE

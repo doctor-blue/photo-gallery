@@ -1,7 +1,11 @@
 package com.devcomentry.photogallery.presention.file_list
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentFileListBinding
@@ -11,12 +15,14 @@ import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.all_file.adapter.FileAdapter
 import com.devcomentry.photogallery.presention.common.BaseFragment
 import com.devcomentry.photogallery.presention.utils.Constants
+import com.devcomentry.photogallery.presention.utils.showToast
 import kotlin.math.log
 
 class FileListFragment : BaseFragment<FragmentFileListBinding>(R.layout.fragment_file_list) {
     val fileAdapter: FileAdapter by lazy {
         FileAdapter(onItemSelected, onItemUnselected, onItemClick)
     }
+    lateinit var intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>
 
     var numFileSelected = 0
 
@@ -80,6 +86,16 @@ class FileListFragment : BaseFragment<FragmentFileListBinding>(R.layout.fragment
                 StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
             rvAllFile.adapter = fileAdapter
         }
+        intentSenderLauncher =
+            registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    requireContext().showToast(R.string.file_deleted_mess)
+                    unselectedAll()
+                    localDataViewModel.refreshData()
+                } else {
+                    requireContext().showToast(R.string.could_not_deleted_file_mess)
+                }
+            }
     }
 
     override fun onResume() {
