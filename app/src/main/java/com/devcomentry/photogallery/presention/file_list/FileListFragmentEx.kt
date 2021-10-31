@@ -1,23 +1,22 @@
-package com.devcomentry.photogallery.presention.all_file
+package com.devcomentry.photogallery.presention.file_list
 
 import android.content.Intent
 import android.net.Uri
 import android.view.MenuItem
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.domain.model.FileModel
-import com.devcomentry.photogallery.presention.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.devcomentry.photogallery.presention.utils.gone
+import com.devcomentry.photogallery.presention.utils.show
+import com.devcomentry.photogallery.presention.utils.showDialogDelete
 
 
-val AllFileFragment.onItemSelected: (FileModel) -> Unit
+val FileListFragment.onItemSelected: (FileModel) -> Unit
     get() = {
         numFileSelected++
         updateFileSelectedToolbar()
     }
 
-val AllFileFragment.onItemUnselected: (FileModel) -> Unit
+val FileListFragment.onItemUnselected: (FileModel) -> Unit
     get() = {
         numFileSelected--
         if (numFileSelected == 0)
@@ -25,22 +24,22 @@ val AllFileFragment.onItemUnselected: (FileModel) -> Unit
         updateFileSelectedToolbar()
     }
 
-val AllFileFragment.onItemClick: (FileModel) -> Unit
+val FileListFragment.onItemClick: (FileModel) -> Unit
     get() = {
         safeNav(
-            R.id.allFileFragment,
-            AllFileFragmentDirections.actionAllFileFragmentToFullFileFragment(it.id)
+            R.id.fileListFragment,
+            FileListFragmentDirections.actionFileListFragmentToFullFileFragment(it.id, idFolder)
         )
     }
 
-fun AllFileFragment.unselectedAll() {
+fun FileListFragment.unselectedAll() {
     fileAdapter.unselectedAll()
     numFileSelected = 0
     updateFileSelectedToolbar()
 }
 
 
-fun AllFileFragment.updateFileSelectedToolbar(isShow: Boolean = false) {
+fun FileListFragment.updateFileSelectedToolbar(isShow: Boolean = false) {
     binding {
         toolbarSelected.title =
             if (numFileSelected > 0) numFileSelected.toString() else requireContext().getString(R.string.select_items)
@@ -52,7 +51,7 @@ fun AllFileFragment.updateFileSelectedToolbar(isShow: Boolean = false) {
     }
 }
 
-fun AllFileFragment.onToolbarItemClick(item: MenuItem) {
+fun FileListFragment.onToolbarItemClick(item: MenuItem) {
     when (item.itemId) {
         R.id.mnu_select_items -> {
             fileAdapter.isShowSelector = true
@@ -64,22 +63,16 @@ fun AllFileFragment.onToolbarItemClick(item: MenuItem) {
         R.id.mnu_reload_from_disk -> {
             localDataViewModel.refreshData()
         }
-        R.id.mnu_settings -> {
-            safeNav(
-                R.id.allFileFragment,
-                AllFileFragmentDirections.actionAllFileFragmentToSettingFragment()
-            )
-        }
     }
 }
 
-fun AllFileFragment.onSelectedToolbarItemClick(item: MenuItem) {
+fun FileListFragment.onSelectedToolbarItemClick(item: MenuItem) {
     when (item.itemId) {
         R.id.mnu_delete -> {
             dataLocal?.let {
 
             }
-            requireContext().showDialogDelete(lifecycle, dataLocal,onCancel = {}){
+            requireContext().showDialogDelete(lifecycle, dataLocal, onCancel = {}) {
                 unselectedAll()
                 localDataViewModel.refreshData()
             }
@@ -109,7 +102,7 @@ fun AllFileFragment.onSelectedToolbarItemClick(item: MenuItem) {
     }
 }
 
-fun AllFileFragment.showEmptyLisLayout(isVisible: Boolean) {
+fun FileListFragment.showEmptyLisLayout(isVisible: Boolean) {
     if (isVisible) {
         binding {
             llListEmpty.show()

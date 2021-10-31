@@ -1,4 +1,4 @@
-package com.devcomentry.photogallery.presention.photo_detail.adapter
+package com.devcomentry.photogallery.presention.full_file.adapter
 
 import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.utils.Constants

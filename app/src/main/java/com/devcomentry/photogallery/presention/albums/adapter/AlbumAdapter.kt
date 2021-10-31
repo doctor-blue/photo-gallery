@@ -10,6 +10,7 @@ import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.AlbumFolderItemBinding
 import com.devcomentry.photogallery.presention.albums.FolderDetail
 import com.devcomentry.photogallery.presention.utils.decimalFormat
+import com.devcomentry.photogallery.presention.utils.setPreventDoubleClick
 
 class AlbumAdapter(
     private val context: Context,
@@ -25,12 +26,15 @@ class AlbumAdapter(
 
         override fun onBind(item: FolderDetail) {
             binding.apply {
-                var fileCount = item.imageFiles.size
+                val fileCount = item.imageFiles.size
                 var folderSize = item.folderSize
                 var unit = context.getStringArray(R.array.memory_unit)[0]
                 val oneGbFromB = 1_073_741_824.0f
                 val oneMBFromB = 1_048_576.0f
 
+                root.setPreventDoubleClick {
+                    onClick(item)
+                }
                 txtFolderName.text = item.folder.name
 
                 if (item.imageFiles.size > 1)
@@ -39,11 +43,10 @@ class AlbumAdapter(
                     txtFileCount.text = ("$fileCount ${context.getString(R.string.file)}")
                 Glide.with(context).load(item.imageFiles[0].uri).into(imgFile)
                 // >1MB dv = MB, <1MB dv = KB
-                if(folderSize >= oneMBFromB && folderSize < oneGbFromB) {
+                if (folderSize >= oneMBFromB && folderSize < oneGbFromB) {
                     folderSize /= oneMBFromB
                     unit = context.getStringArray(R.array.memory_unit)[1]
-                }
-                else if(folderSize >= oneGbFromB) {
+                } else if (folderSize >= oneGbFromB) {
                     folderSize /= oneGbFromB
                     unit = context.getStringArray(R.array.memory_unit)[2]
                 } else {

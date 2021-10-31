@@ -11,9 +11,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.DialogCancelDeleteBinding
+import com.devcomentry.photogallery.domain.model.DataLocal
+import com.devcomentry.photogallery.domain.model.FileModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 fun Context.showDialogDelete(
     lifecycle: Lifecycle,
+    dataLocal: DataLocal? = null,
+    fileModel: FileModel? = null,
     onCancel: () -> Unit = {},
     onConfirm: () -> Unit,
 ) {
@@ -35,7 +42,28 @@ fun Context.showDialogDelete(
         dialog.dismiss()
     }
     binding.tvOk.setPreventDoubleClick {
-        onConfirm()
+
+        if (dataLocal != null) {
+            CoroutineScope(Dispatchers.Main).launch {
+                performDeleteImage(
+                    dataLocal.file,
+                    applicationContext
+                ) {
+                    onConfirm()
+                }
+            }
+        }
+        if (fileModel != null) {
+            CoroutineScope(Dispatchers.Main).launch {
+                performDeleteImage(
+                    listOf(fileModel),
+                    applicationContext
+                ) {
+                    onConfirm()
+                }
+            }
+        }
+
         dialog.dismiss()
     }
 

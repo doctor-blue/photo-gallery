@@ -1,4 +1,4 @@
-package com.devcomentry.photogallery.presention.photo_detail.adapter
+package com.devcomentry.photogallery.presention.full_file.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
