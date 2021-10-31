@@ -1,4 +1,4 @@
-package com.devcomentry.photogallery.presention.photo_detail
+package com.devcomentry.photogallery.presention.full_file
 
 fun FullFileFragment.initViewPager() {
     binding {
@@ -16,7 +16,7 @@ fun FullFileFragment.initData() {
         val position = listFile.indexOf(file)
 
         fullFileAdapter.submitList(listFile)
-        binding.vpFullFile.setCurrentItem(position, true)
+        binding.vpFullFile.setCurrentItem(position, false)
 
     })
 }

@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_albumsFragment_to_fullFileFragment"
             app:destination="@id/fullFileFragment" />
+        <action
+            android:id="@+id/action_albumsFragment_to_fileListFragment"
+            app:destination="@id/fileListFragment" />
     </fragment>
     <fragment
         android:id="@+id/allFileFragment"
@@ -64,7 +67,7 @@
         android:label="SettingFragment" />
     <fragment
         android:id="@+id/fullFileFragment"
-        android:name="com.devcomentry.photogallery.presention.photo_detail.FullFileFragment"
+        android:name="com.devcomentry.photogallery.presention.full_file.FullFileFragment"
         android:label="FullFileFragment" >
         <argument
             android:name="idFile"
@@ -74,5 +77,21 @@
             android:name="idFolder"
             app:argType="long"
             android:defaultValue="-1L" />
+    </fragment>
+    <fragment
+        android:id="@+id/fileListFragment"
+        android:name="com.devcomentry.photogallery.presention.file_list.FileListFragment"
+        android:label="FileListFragment" >
+        <argument
+            android:name="idFolder"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_fileListFragment_to_fullFileFragment"
+            app:destination="@id/fullFileFragment" />
+        <argument
+            android:name="folderName"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentAlbumsBinding
 import com.devcomentry.photogallery.presention.albums.adapter.AlbumAdapter
+import com.devcomentry.photogallery.presention.all_file.AllFileFragmentDirections
 import com.devcomentry.photogallery.presention.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,7 +53,13 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_alb
     }
 
     private val onAlbumClick: (FolderDetail) -> Unit = {
-//        navController.navigate()
+        safeNav(
+            R.id.albumsFragment,
+            AlbumsFragmentDirections.actionAlbumsFragmentToFileListFragment(
+                idFolder = it.folder.id,
+                it.folder.name
+            )
+        )
     }
 
 

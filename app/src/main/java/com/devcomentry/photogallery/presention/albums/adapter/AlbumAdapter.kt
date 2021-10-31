@@ -8,6 +8,7 @@ import com.devcomentry.moonlight.binding.BindingViewHolder
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.AlbumFolderItemBinding
 import com.devcomentry.photogallery.presention.albums.FolderDetail
+import com.devcomentry.photogallery.presention.utils.setPreventDoubleClick
 
 class AlbumAdapter(
     private val context: Context,
@@ -23,6 +24,9 @@ class AlbumAdapter(
 
         override fun onBind(item: FolderDetail) {
             binding.apply {
+                root.setPreventDoubleClick {
+                    onClick(item)
+                }
                 txtFolderName.text = item.folder.name
                 if (item.imageFiles.size > 1)
                     txtFileCount.text = (item.imageFiles.size.toString() + " files")

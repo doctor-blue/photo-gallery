@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/dark">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/img_full"
@@ -45,7 +45,7 @@
             android:src="@drawable/ic_baseline_arrow_back"
             app:layout_constraintBottom_toBottomOf="@id/txt_date"
             app:layout_constraintStart_toStartOf="@id/blur_view_top"
-            app:layout_constraintTop_toTopOf="@id/txt_name" />
+            app:layout_constraintTop_toTopOf="@id/blur_view_top" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imv_delete"
