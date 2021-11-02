@@ -1,27 +1,92 @@
 package com.devcomentry.photogallery.presention.full_file
 
+import android.app.Activity
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.viewpager2.widget.ViewPager2
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentFullFileBinding
+import com.devcomentry.photogallery.presention.all_file.unselectedAll
 import com.devcomentry.photogallery.presention.common.BaseFragment
 import com.devcomentry.photogallery.presention.full_file.adapter.FullFileAdapter
+import com.devcomentry.photogallery.presention.utils.*
 
 
 class FullFileFragment : BaseFragment<FragmentFullFileBinding>(R.layout.fragment_full_file) {
 
     val fullFileAdapter: FullFileAdapter by lazy {
-        FullFileAdapter()
+        FullFileAdapter {
+            isFunctionButtonVisible = !isFunctionButtonVisible
+        }
     }
+    var isFunctionButtonVisible = false
+        set(value) {
+            field = value
+            setFunctionButtonVisible(value)
+        }
+    lateinit var intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>
 
     override fun initControls(savedInstanceState: Bundle?) {
         super.initControls(savedInstanceState)
 
         requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         requireActivity().window.statusBarColor = Color.parseColor("#101010")
+
+        intentSenderLauncher =
+            registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    requireContext().showToast(R.string.file_deleted_mess)
+                    localDataViewModel.refreshData()
+                } else {
+                    requireContext().showToast(R.string.could_not_deleted_file_mess)
+                }
+            }
+
         initViewPager()
         initData()
+    }
+
+    override fun initEvents() {
+        super.initEvents()
+        binding {
+            imvDelete.setPreventDoubleClick {
+            }
+            imvBack.setPreventDoubleClick {
+                navController.popBackStack()
+            }
+            vpFullFile.registerOnPageChangeCallback(
+                object : ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        val currentItem = fullFileAdapter.currentList[position]
+                        binding {
+                            txtName.text = currentItem.name
+                            txtDate.text = Constants.formatter.format(currentItem.timeCreated)
+                        }
+                    }
+                })
+
+            imvDelete.setPreventDoubleClick {
+                val currentItem = fullFileAdapter.currentList[vpFullFile.currentItem]
+
+                performDeleteImage(
+                    listOf(currentItem),
+                    requireContext(),
+                    intentSenderLauncher,
+                    lifecycle
+                ) {
+                    localDataViewModel.refreshData()
+                }
+            }
+            imvShare.setPreventDoubleClick {
+                val currentItem = Uri.parse(fullFileAdapter.currentList[vpFullFile.currentItem].uri)
+                shareImageTo(arrayListOf(currentItem), requireContext())
+            }
+        }
     }
 
     override fun onDestroy() {

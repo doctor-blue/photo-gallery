@@ -8,13 +8,11 @@ import com.bumptech.glide.Glide
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FullImageItemBinding
 import com.devcomentry.photogallery.domain.model.FileModel
+import com.devcomentry.photogallery.presention.utils.setPreventDoubleClick
 
-class FullFileAdapter : ListAdapter<FileModel, FullFileAdapter.FullFileViewHolder>(FileDiff()) {
-    var isDetailVisible = false
-        set(value) {
-            field = value
-            showDetailView()
-        }
+class FullFileAdapter(
+    val onItemClick:(FileModel)->Unit,
+) : ListAdapter<FileModel, FullFileAdapter.FullFileViewHolder>(FileDiff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FullFileViewHolder {
         val binding =
@@ -46,31 +44,24 @@ class FullFileAdapter : ListAdapter<FileModel, FullFileAdapter.FullFileViewHolde
         }
     }
 
-    private fun showDetailView() {
-        for (i in currentList.indices) {
-            if (currentList[i] is FileModel)
-                notifyItemChanged(i, Payload())
-        }
-    }
-
     inner class FullFileViewHolder(
         val binding: FullImageItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         var fileModel: FileModel? = null
 
         init {
-            initEvents()
+            with(binding) {
+                imgFull.setPreventDoubleClick {
+                   fileModel?.let {
+                       onItemClick(it)
+                   }
+                }
+            }
         }
 
         fun onBind(fileModel: FileModel) {
             this.fileModel = fileModel
             setImage(fileModel)
-            setData(fileModel)
-            setFunctionButtonVisible(isDetailVisible)
-        }
-
-        fun setDetailVisible() {
-            isDetailVisible = !isDetailVisible
         }
 
         private fun setImage(item: FileModel) {

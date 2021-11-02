@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.activity.result.IntentSenderRequest
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.domain.model.FileModel
+import com.devcomentry.photogallery.presention.file_list.unselectedAll
 import com.devcomentry.photogallery.presention.utils.*
 
 
@@ -80,27 +81,15 @@ fun AllFileFragment.onSelectedToolbarItemClick(item: MenuItem) {
     when (item.itemId) {
         R.id.mnu_delete -> {
             if (numFileSelected > 0) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    val sender = MediaStore.createDeleteRequest(
-                        requireContext().contentResolver,
-                        dataLocal?.file?.filter { it.isSelected }?.map { Uri.parse(it.uri) }
-                            ?: listOf()
-                    ).intentSender
-                    try {
-                        intentSenderLauncher.launch(
-                            IntentSenderRequest.Builder(sender).build()
-                        )
-                    } catch (e: IntentSender.SendIntentException) {
-                    }
-
-                } else
-                    requireContext().showDialogDelete(lifecycle, dataLocal, onCancel = {
-                        requireContext().showToast(R.string.could_not_deleted_file_mess)
-                    }) {
-                        requireContext().showToast(R.string.file_deleted_mess)
-                        unselectedAll()
-                        localDataViewModel.refreshData()
-                    }
+                performDeleteImage(
+                    dataLocal?.file?.filter { it.isSelected } ?: listOf(),
+                    requireContext(),
+                    intentSenderLauncher,
+                    lifecycle
+                ) {
+                    unselectedAll()
+                    localDataViewModel.refreshData()
+                }
             }
         }
 //        R.id.mnu_favorites -> {

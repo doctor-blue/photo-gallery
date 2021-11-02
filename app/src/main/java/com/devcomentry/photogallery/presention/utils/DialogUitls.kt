@@ -19,8 +19,6 @@ import kotlinx.coroutines.launch
 
 fun Context.showDialogDelete(
     lifecycle: Lifecycle,
-    dataLocal: DataLocal? = null,
-    fileModel: FileModel? = null,
     onCancel: () -> Unit = {},
     onConfirm: () -> Unit,
 ) {
@@ -42,28 +40,7 @@ fun Context.showDialogDelete(
         dialog.dismiss()
     }
     binding.tvOk.setPreventDoubleClick {
-
-        if (dataLocal != null) {
-            CoroutineScope(Dispatchers.Main).launch {
-                performDeleteImage(
-                    dataLocal.file,
-                    applicationContext
-                ) {
-                    onConfirm()
-                }
-            }
-        }
-        if (fileModel != null) {
-            CoroutineScope(Dispatchers.Main).launch {
-                performDeleteImage(
-                    listOf(fileModel),
-                    applicationContext
-                ) {
-                    onConfirm()
-                }
-            }
-        }
-
+        onConfirm()
         dialog.dismiss()
     }
 
