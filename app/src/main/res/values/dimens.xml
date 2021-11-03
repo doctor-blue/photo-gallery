@@ -12,6 +12,7 @@
     <dimen name="space_screen_small">16dp</dimen>
     <dimen name="space_screen_normal">24dp</dimen>
     <dimen name="space_screen_large">32dp</dimen>
+    <dimen name="space_screen_super_large">48dp</dimen>
 
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="text_size_18">18sp</dimen>

@@ -1,17 +1,19 @@
 package com.devcomentry.photogallery.presention.full_file
 
 import android.app.Activity
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.view.Window
 import android.view.WindowManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentFullFileBinding
-import com.devcomentry.photogallery.presention.all_file.unselectedAll
 import com.devcomentry.photogallery.presention.common.BaseFragment
 import com.devcomentry.photogallery.presention.full_file.adapter.FullFileAdapter
 import com.devcomentry.photogallery.presention.utils.*
@@ -24,19 +26,22 @@ class FullFileFragment : BaseFragment<FragmentFullFileBinding>(R.layout.fragment
             isFunctionButtonVisible = !isFunctionButtonVisible
         }
     }
-    var isFunctionButtonVisible = false
+
+    private var isFunctionButtonVisible = false
         set(value) {
             field = value
             setFunctionButtonVisible(value)
+            if (value) {
+                hideSystemUI()
+            } else {
+                showSystemUI()
+            }
         }
     lateinit var intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>
 
     override fun initControls(savedInstanceState: Bundle?) {
         super.initControls(savedInstanceState)
-
-        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        requireActivity().window.statusBarColor = Color.parseColor("#101010")
-
+        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         intentSenderLauncher =
             registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
@@ -89,10 +94,31 @@ class FullFileFragment : BaseFragment<FragmentFullFileBinding>(R.layout.fragment
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        requireActivity().window.statusBarColor = Color.parseColor("#03a9f4")
+    override fun onResume() {
+        super.onResume()
+        showSystemUI()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+    }
+
+    private fun hideSystemUI(window: Window = requireActivity().window) {
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, binding.root).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+    }
+
+    private fun showSystemUI(window: Window = requireActivity().window) {
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowInsetsControllerCompat(
+            window,
+            binding.root
+        ).show(WindowInsetsCompat.Type.systemBars())
+    }
 }
