@@ -23,6 +23,7 @@ fun FullFileFragment.initData() {
 
     })
 }
+
 fun FullFileFragment.setFunctionButtonVisible(isVisible: Boolean) {
     binding {
         if (isVisible) {
@@ -33,6 +34,8 @@ fun FullFileFragment.setFunctionButtonVisible(isVisible: Boolean) {
             imvShare.gone()
             imvDetail.gone()
             imvLock.gone()
+            blurViewBottom.gone()
+            blurViewTop.gone()
         } else {
             imvBack.show()
             txtName.show()
@@ -41,6 +44,8 @@ fun FullFileFragment.setFunctionButtonVisible(isVisible: Boolean) {
             imvShare.show()
             imvDetail.show()
             imvLock.show()
+            blurViewBottom.show()
+            blurViewTop.show()
         }
     }
 }

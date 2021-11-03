@@ -6,7 +6,8 @@ import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentAllFileBinding
 import com.devcomentry.photogallery.domain.model.DataLocal
@@ -14,7 +15,10 @@ import com.devcomentry.photogallery.domain.model.DateSelect
 import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.all_file.adapter.FileAdapter
 import com.devcomentry.photogallery.presention.common.BaseFragment
+import com.devcomentry.photogallery.presention.utils.HideBottomNavEvent
 import com.devcomentry.photogallery.presention.utils.showToast
+import kotlinx.coroutines.*
+import org.greenrobot.eventbus.EventBus
 
 class AllFileFragment :
     BaseFragment<FragmentAllFileBinding>(R.layout.fragment_all_file) {
@@ -45,6 +49,16 @@ class AllFileFragment :
                 onSelectedToolbarItemClick(it)
                 true
             }
+            rvAllFile.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy > 0) {
+                        EventBus.getDefault().post(HideBottomNavEvent(true))
+                    } else {
+                        EventBus.getDefault().post(HideBottomNavEvent(false))
+                    }
+                }
+            })
         }
     }
 
@@ -66,8 +80,16 @@ class AllFileFragment :
         })
 
         binding {
-            rvAllFile.layoutManager =
-                StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+            val layoutManager = GridLayoutManager(requireContext(), 3)
+            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int = when {
+                    position == fileAdapter.currentList.size -> 3
+                    fileAdapter.currentList[position] is FileModel -> 1
+                    else -> 3
+                }
+
+            }
+            rvAllFile.layoutManager = layoutManager
             rvAllFile.adapter = fileAdapter
         }
 

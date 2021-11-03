@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentFileListBinding
 import com.devcomentry.photogallery.domain.model.DataLocal
@@ -16,7 +16,6 @@ import com.devcomentry.photogallery.presention.all_file.adapter.FileAdapter
 import com.devcomentry.photogallery.presention.common.BaseFragment
 import com.devcomentry.photogallery.presention.utils.Constants
 import com.devcomentry.photogallery.presention.utils.showToast
-import kotlin.math.log
 
 class FileListFragment : BaseFragment<FragmentFileListBinding>(R.layout.fragment_file_list) {
     val fileAdapter: FileAdapter by lazy {
@@ -82,8 +81,16 @@ class FileListFragment : BaseFragment<FragmentFileListBinding>(R.layout.fragment
         })
 
         binding {
-            rvAllFile.layoutManager =
-                StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+            val layoutManager = GridLayoutManager(requireContext(), 3)
+            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int = when {
+                    position == fileAdapter.currentList.size -> 3
+                    fileAdapter.currentList[position] is FileModel -> 1
+                    else -> 3
+                }
+
+            }
+            rvAllFile.layoutManager = layoutManager
             rvAllFile.adapter = fileAdapter
         }
         intentSenderLauncher =
