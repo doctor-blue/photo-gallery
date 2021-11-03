@@ -7,6 +7,7 @@
         <entry key="app/src/main/res/drawable/bg_file_item_selected.xml" value="0.27685185185185185" />
         <entry key="app/src/main/res/drawable/bg_gradient_bottom_top.xml" value="0.27685185185185185" />
         <entry key="app/src/main/res/drawable/bg_gradient_top_bottom.xml" value="0.27685185185185185" />
+        <entry key="app/src/main/res/drawable/bottom_nav_item_color.xml" value="0.24722222222222223" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/fragment_albums.xml" value="0.28125" />
         <entry key="app/src/main/res/layout/fragment_all_file.xml" value="0.2953125" />
@@ -15,6 +16,7 @@
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/full_image_item.xml" value="0.335" />
         <entry key="app/src/main/res/layout/home_fragment.xml" value="0.2953125" />
+        <entry key="app/src/main/res/layout/item_footer.xml" value="0.2953125" />
         <entry key="app/src/main/res/menu/all_file_menu.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.2953125" />
         <entry key="app/src/main/res/menu/file_select_menu.xml" value="0.3098958333333333" />

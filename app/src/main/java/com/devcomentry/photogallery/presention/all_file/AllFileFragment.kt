@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentAllFileBinding
 import com.devcomentry.photogallery.domain.model.DataLocal
@@ -66,8 +66,16 @@ class AllFileFragment :
         })
 
         binding {
-            rvAllFile.layoutManager =
-                StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+            val layoutManager = GridLayoutManager(requireContext(), 3)
+            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int = when {
+                    position == fileAdapter.currentList.size -> 3
+                    fileAdapter.currentList[position] is FileModel -> 1
+                    else -> 3
+                }
+
+            }
+            rvAllFile.layoutManager = layoutManager
             rvAllFile.adapter = fileAdapter
         }
 

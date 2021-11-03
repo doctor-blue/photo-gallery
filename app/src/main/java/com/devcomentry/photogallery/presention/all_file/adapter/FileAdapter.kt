@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FileItemBinding
+import com.devcomentry.photogallery.databinding.ItemFooterBinding
 import com.devcomentry.photogallery.databinding.ItemGridDateSectionedBinding
 import com.devcomentry.photogallery.domain.model.DateSelect
 import com.devcomentry.photogallery.domain.model.FileModel
+import com.devcomentry.photogallery.presention.common.FooterViewHolder
 import com.devcomentry.photogallery.presention.utils.getDisplayWidth
 
 class FileAdapter(
@@ -28,44 +30,58 @@ class FileAdapter(
         }
 
     companion object {
-        private const val ITEM_IMAGE = 0
-        private const val ITEM_TITLE = 1
+        const val ITEM_IMAGE = 0
+        const val ITEM_TITLE = 1
+        const val FOOTER = 3
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        if (viewType == ITEM_IMAGE) {
-            val binding =
-                FileItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            val desiredWidth = parent.context.getDisplayWidth() / 3
-            return FileViewHolder(binding, desiredWidth = desiredWidth.toInt())
-        } else {
-            val binding =
-                ItemGridDateSectionedBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            return DateTitleViewHolder(binding)
+        when (viewType) {
+            ITEM_IMAGE -> {
+                val binding =
+                    FileItemBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
+                val desiredWidth = parent.context.getDisplayWidth() / 3
+                return FileViewHolder(binding, desiredWidth = desiredWidth.toInt())
+            }
+            ITEM_TITLE -> {
+                val binding =
+                    ItemGridDateSectionedBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
+                return DateTitleViewHolder(binding)
+            }
+            else -> {
+                val binding =
+                    ItemFooterBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
+                return FooterViewHolder(binding)
+            }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (currentList[position] is DateSelect)
-            ITEM_TITLE
-        else
-            ITEM_IMAGE
+        return when {
+            position == currentList.size -> FOOTER
+            currentList[position] is DateSelect -> ITEM_TITLE
+            else -> ITEM_IMAGE
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return super.getItemCount() + 1
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-        val layoutParams = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
-        layoutParams.isFullSpan = holder is DateTitleViewHolder
-
         if (holder is FileViewHolder)
             holder.onBind(currentList[position] as FileModel)
         else if (holder is DateTitleViewHolder)
@@ -106,6 +122,7 @@ class FileAdapter(
         }
         isShowSelector = false
     }
+
     fun selectAll() {
         for (i in currentList.indices) {
             val current = currentList[i]
