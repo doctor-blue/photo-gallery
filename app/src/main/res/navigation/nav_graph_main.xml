@@ -93,5 +93,12 @@
             android:name="folderName"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_fileListFragment_to_copyMovingFileFragment"
+            app:destination="@id/copyMovingFileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/copyMovingFileFragment"
+        android:name="com.devcomentry.photogallery.presention.copy_moving_file.CopyMovingFileFragment"
+        android:label="CopyMovingFileFragment" />
 </navigation>

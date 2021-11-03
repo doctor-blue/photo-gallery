@@ -28,7 +28,6 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_alb
                     files.map { it.size }.sum()
                 )
             }
-//            folderSize = 0f
 
             albumAdapter.submitList(folderDetails)
             showEmptyLisLayout(folderDetails.isEmpty())

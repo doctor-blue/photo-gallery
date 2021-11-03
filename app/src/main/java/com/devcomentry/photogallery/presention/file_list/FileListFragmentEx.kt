@@ -4,12 +4,15 @@ import android.content.IntentSender
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import android.view.MenuItem
 import androidx.activity.result.IntentSenderRequest
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.all_file.unselectedAll
 import com.devcomentry.photogallery.presention.utils.*
+import java.io.File
+import java.net.URI
 
 
 val FileListFragment.onItemSelected: (FileModel) -> Unit
@@ -103,6 +106,12 @@ fun FileListFragment.onSelectedToolbarItemClick(item: MenuItem) {
             fileAdapter.selectAll()
             updateFileSelectedToolbar()
 
+        }
+        R.id.mnu_move_folder -> {
+            safeNav(
+                R.id.fileListFragment,
+                FileListFragmentDirections.actionFileListFragmentToCopyMovingFileFragment()
+            )
         }
     }
 }
