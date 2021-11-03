@@ -63,7 +63,8 @@ class LocalDataViewModel @Inject constructor(
             MediaStore.Files.FileColumns.SIZE,
             MediaStore.Files.FileColumns.DATE_ADDED,
             MediaStore.Files.FileColumns.DATE_TAKEN,
-
+            MediaStore.Files.FileColumns.WIDTH,
+            MediaStore.Files.FileColumns.HEIGHT,
             )
     else arrayOf(
         MediaStore.Files.FileColumns.MEDIA_TYPE,
@@ -75,6 +76,8 @@ class LocalDataViewModel @Inject constructor(
         MediaStore.Files.FileColumns.SIZE,
         MediaStore.Files.FileColumns.DATE_ADDED,
         MediaStore.Files.FileColumns.DATE_TAKEN,
+        MediaStore.Files.FileColumns.WIDTH,
+        MediaStore.Files.FileColumns.HEIGHT,
     )
 
     private val _dataLocal = MutableLiveData(DataLocal())
@@ -241,7 +244,10 @@ class LocalDataViewModel @Inject constructor(
                                 timeCreated = timeModified,
                                 type = IS_IMAGE,
                                 size = it.getString(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE))
-                                    .toFloat()
+                                    .toFloat(),
+                                width = it.getLong(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.WIDTH)),
+                                height = it.getLong(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.HEIGHT))
+
                             )
                         )
 

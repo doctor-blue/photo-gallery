@@ -1,5 +1,9 @@
 package com.devcomentry.photogallery.presention.full_file
 
+import android.view.Window
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.devcomentry.photogallery.presention.utils.gone
 import com.devcomentry.photogallery.presention.utils.show
 
@@ -48,4 +52,21 @@ fun FullFileFragment.setFunctionButtonVisible(isVisible: Boolean) {
             blurViewTop.show()
         }
     }
+}
+ fun FullFileFragment.hideSystemUI(window: Window = requireActivity().window) {
+
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+    WindowInsetsControllerCompat(window, binding.root).let { controller ->
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    }
+}
+
+ fun FullFileFragment.showSystemUI(window: Window = requireActivity().window) {
+    WindowCompat.setDecorFitsSystemWindows(window, true)
+    WindowInsetsControllerCompat(
+        window,
+        binding.root
+    ).show(WindowInsetsCompat.Type.systemBars())
 }

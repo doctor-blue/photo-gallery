@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.lifecycle.Lifecycle
+import com.afollestad.materialdialogs.utils.MDUtil.getStringArray
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.domain.model.FileModel
 import kotlinx.coroutines.CoroutineScope
@@ -105,4 +106,24 @@ fun shareImageTo(imageUri: ArrayList<Uri>, context: Context) {
             context.getString(R.string.share_images_to)
         )
     )
+}
+
+fun formatFileSize(size: Float, context: Context): String {
+    var folderSize = size
+    var unit = context.getStringArray(R.array.memory_unit)[0]
+    val oneGbFromB = 1_073_741_824.0f
+    val oneMBFromB = 1_048_576.0f
+
+    // >1MB dv = MB, <1MB dv = KB
+    if (folderSize >= oneMBFromB && folderSize < oneGbFromB) {
+        folderSize /= oneMBFromB
+        unit = context.getStringArray(R.array.memory_unit)[1]
+    } else if (folderSize >= oneGbFromB) {
+        folderSize /= oneGbFromB
+        unit = context.getStringArray(R.array.memory_unit)[2]
+    } else {
+        folderSize /= 1024
+    }
+
+    return (folderSize.decimalFormat() + unit)
 }
