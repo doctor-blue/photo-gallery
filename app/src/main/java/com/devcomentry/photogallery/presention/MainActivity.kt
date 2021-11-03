@@ -11,9 +11,12 @@ import androidx.navigation.ui.setupWithNavController
 import com.devcomentry.moonlight.binding.BindingActivity
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.ActivityMainBinding
+import com.devcomentry.photogallery.presention.utils.HideBottomNavEvent
 import com.devcomentry.photogallery.presention.utils.gone
 import com.devcomentry.photogallery.presention.utils.show
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 @AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
@@ -28,12 +31,12 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.allFileFragment || destination.id == R.id.albumsFragment) {
-                onHideBottomNavEvent(false)
+                onHideBottomNavEvent(HideBottomNavEvent(false))
                 binding.bottomBar.show()
 //                Log.d("MainActivity", "show + ${binding.bottomBar.isShow}")
             } else {
                 if (isInit) {
-                    onHideBottomNavEvent(true)
+                    onHideBottomNavEvent(HideBottomNavEvent(true))
                 }
             }
         }
@@ -52,8 +55,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         binding.bottomBar.y
     }
 
-    private fun onHideBottomNavEvent(isShow: Boolean) {
-        if (isShow) {
+    @Subscribe
+    fun onHideBottomNavEvent(event: HideBottomNavEvent) {
+        if (event.isShow) {
             if (SystemClock.elapsedRealtime() - lastScrollTime < 300) return
             lastScrollTime = SystemClock.elapsedRealtime()
             binding.bottomBar.animate().translationY(bottomNavY).duration =
@@ -70,5 +74,13 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         return true
     }
 
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
 
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
 }

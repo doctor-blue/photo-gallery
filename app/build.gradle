@@ -109,4 +109,7 @@ dependencies {
     // ripple effect
     implementation 'com.balysv:material-ripple:1.0.2'
 
+    /*EventBus to send and receive data use Observer pattern*/
+    implementation "org.greenrobot:eventbus:3.2.0"
+
 }

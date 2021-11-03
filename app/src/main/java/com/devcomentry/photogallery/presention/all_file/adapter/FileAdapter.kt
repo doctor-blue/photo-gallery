@@ -77,9 +77,15 @@ class FileAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return super.getItemCount() + 1
-    }
+//    override fun getItemCount(): Int {
+//        if (currentList.size == 0) {
+//            //Return 1 here to show nothing
+//            return 1
+//        }
+//
+//        // Add extra view to show the footer view
+//        return super.getItemCount() + 1;
+//    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is FileViewHolder)
