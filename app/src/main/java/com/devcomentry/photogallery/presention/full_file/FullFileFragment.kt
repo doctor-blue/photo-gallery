@@ -77,7 +77,7 @@ class FullFileFragment : BaseFragment<FragmentFullFileBinding>(R.layout.fragment
                     listOf(currentItem),
                     requireContext(),
                     intentSenderLauncher,
-                    lifecycle
+                    lifecycle = lifecycle,
                 ) {
                     localDataViewModel.refreshData()
                 }
@@ -97,6 +97,19 @@ class FullFileFragment : BaseFragment<FragmentFullFileBinding>(R.layout.fragment
                         idFolder = currentItem.idFolder
                     )
                 )
+            }
+            imvLock.setPreventDoubleClick {
+                val currentItem = fullFileAdapter.currentList[vpFullFile.currentItem]
+                performDeleteImage(
+                    listOf(currentItem),
+                    requireContext(),
+                    intentSenderLauncher,
+                    lifecycle = lifecycle,
+                    isHide = true,
+                    dialogMesRes = R.string.hide_file_complete_mess
+                ) {
+                    localDataViewModel.refreshData()
+                }
             }
         }
     }

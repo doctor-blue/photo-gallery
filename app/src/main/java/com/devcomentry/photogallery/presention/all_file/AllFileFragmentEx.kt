@@ -85,7 +85,7 @@ fun AllFileFragment.onSelectedToolbarItemClick(item: MenuItem) {
                     dataLocal?.file?.filter { it.isSelected } ?: listOf(),
                     requireContext(),
                     intentSenderLauncher,
-                    lifecycle
+                    lifecycle = lifecycle
                 ) {
                     unselectedAll()
                     localDataViewModel.refreshData()

@@ -40,5 +40,6 @@
     <string name="could_not_deleted_file_mess">File couldn\'t be deleted</string>
     <string name="info">Info</string>
     <string name="details">Details</string>
-
+    <string name="change_your_password">Change your password</string>
+    <string name="hide_file_complete_mess">Hide files done! Please delete the file to ensure security</string>
 </resources>

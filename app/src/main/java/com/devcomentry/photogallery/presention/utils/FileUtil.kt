@@ -23,6 +23,8 @@ fun performDeleteImage(
     images: List<FileModel>,
     context: Context,
     intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>? = null,
+    isHide: Boolean = false,
+    dialogMesRes: Int = R.string.are_you_sure_want_to_delete,
     lifecycle: Lifecycle,
     onImageRemoved: () -> Unit
 ) {
@@ -38,32 +40,20 @@ fun performDeleteImage(
              * activity can use to prompt the user to grant permission to the item
              * so it can be either updated or deleted.
              */
-            /**
-             * In [Build.VERSION_CODES.Q] and above, it isn't possible to modify
-             * or delete items in MediaStore directly, and explicit permission
-             * must usually be obtained to do this.
-             *
-             * The way it works is the OS will throw a [RecoverableSecurityException],
-             * which we can catch here. Inside there's an [IntentSender] which the
-             * activity can use to prompt the user to grant permission to the item
-             * so it can be either updated or deleted.
-             */
+            val onDelete: () -> Unit = {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val sender = MediaStore.createDeleteRequest(
+                        context.contentResolver,
+                        images.map { Uri.parse(it.uri) }
+                    ).intentSender
+                    try {
+                        intentSenderLauncher?.launch(
+                            IntentSenderRequest.Builder(sender).build()
+                        )
+                    } catch (e: SendIntentException) {
+                    }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val sender = MediaStore.createDeleteRequest(
-                    context.contentResolver,
-                    images.map { Uri.parse(it.uri) }
-                ).intentSender
-                try {
-                    intentSenderLauncher?.launch(
-                        IntentSenderRequest.Builder(sender).build()
-                    )
-                } catch (e: SendIntentException) {
-                }
-
-            } else {
-                context.showDialogDelete(lifecycle, onCancel = {
-                }) {
+                } else {
                     for (i in images.indices) {
                         val image = images[i]
                         context.contentResolver.delete(
@@ -74,6 +64,30 @@ fun performDeleteImage(
                     }
                     context.showToast(R.string.file_deleted_mess)
                     onImageRemoved()
+                }
+            }
+            val titleRes = if (isHide) R.string.alert else R.string.are_you_sure
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (isHide) {
+                    context.showDialogDelete(
+                        lifecycle,
+                        resTitle = titleRes,
+                        resContent = dialogMesRes,
+                        onCancel = {
+                        }) {
+                        onDelete()
+                    }
+                } else {
+                    onDelete()
+                }
+            } else {
+                context.showDialogDelete(
+                    lifecycle,
+                    resTitle = titleRes,
+                    resContent = dialogMesRes,
+                    onCancel = {
+                    }) {
+                    onDelete()
                 }
             }
 
