@@ -17,11 +17,12 @@
         <entry key="app/src/main/res/layout/dialog_file_detail.xml" value="0.20277777777777778" />
         <entry key="app/src/main/res/layout/dialog_set_password.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/dialog_type_password.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/file_item.xml" value="0.24814814814814815" />
         <entry key="app/src/main/res/layout/fragment_albums.xml" value="0.28125" />
         <entry key="app/src/main/res/layout/fragment_all_file.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/fragment_file_detail.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_file_list.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/fragment_full_file.xml" value="0.14635416666666667" />
+        <entry key="app/src/main/res/layout/fragment_full_file.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/full_image_item.xml" value="0.335" />
         <entry key="app/src/main/res/layout/home_fragment.xml" value="0.2953125" />

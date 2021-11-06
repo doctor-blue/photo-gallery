@@ -10,7 +10,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dark">
+        android:background="@color/black">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_full_file"

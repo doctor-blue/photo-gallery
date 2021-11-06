@@ -16,10 +16,7 @@ import com.devcomentry.photogallery.domain.model.FileModel
 import com.devcomentry.photogallery.presention.all_file.adapter.FileAdapter
 import com.devcomentry.photogallery.presention.common.BaseFragment
 import com.devcomentry.photogallery.presention.utils.HideBottomNavEvent
-import com.devcomentry.photogallery.presention.utils.showDialogSetPassword
-import com.devcomentry.photogallery.presention.utils.showDialogTypePassword
 import com.devcomentry.photogallery.presention.utils.showToast
-import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
 
 class AllFileFragment :
