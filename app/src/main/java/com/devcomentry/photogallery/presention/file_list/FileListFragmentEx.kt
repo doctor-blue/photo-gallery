@@ -108,10 +108,26 @@ fun FileListFragment.onSelectedToolbarItemClick(item: MenuItem) {
 
         }
         R.id.mnu_move_folder -> {
-            safeNav(
-                R.id.fileListFragment,
-                FileListFragmentDirections.actionFileListFragmentToCopyMovingFileFragment()
-            )
+            if (numFileSelected > 0) {
+                val fileIds = dataLocal?.file?.filter { it.isSelected }?.map { it.id }?.toLongArray()
+                safeNav(
+                    R.id.fileListFragment,
+                    FileListFragmentDirections.actionFileListFragmentToCopyMovingFileFragment(false, fileIds)
+                )
+            } else {
+
+            }
+        }
+        R.id.mnu_copy_folder -> {
+            if (numFileSelected > 0) {
+                val fileIds = dataLocal?.file?.filter { it.isSelected }?.map { it.id }?.toLongArray()
+                safeNav(
+                    R.id.fileListFragment,
+                    FileListFragmentDirections.actionFileListFragmentToCopyMovingFileFragment(false, fileIds)
+                )
+            } else {
+
+            }
         }
     }
 }

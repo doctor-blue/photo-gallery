@@ -44,9 +44,6 @@ class AlbumAdapter(
                     txtFolderName.text = context.getString(R.string.create_folder)
 
                 } else {
-                    root.setPreventDoubleClick {
-                        onClick(item)
-                    }
                     txtFolderName.text = item.folder.name
 
                     if (item.imageFiles.size > 1)
@@ -69,6 +66,9 @@ class AlbumAdapter(
 
                     txtFolderSize.text = (folderSize.decimalFormat() + unit)
 
+                }
+                root.setPreventDoubleClick {
+                    onClick(item)
                 }
             }
         }

@@ -100,5 +100,13 @@
     <fragment
         android:id="@+id/copyMovingFileFragment"
         android:name="com.devcomentry.photogallery.presention.copy_moving_file.CopyMovingFileFragment"
-        android:label="CopyMovingFileFragment" />
+        android:label="CopyMovingFileFragment" >
+        <argument
+            android:name="isCopyAction"
+            app:argType="boolean" />
+        <argument
+            android:name="files"
+            app:argType="long[]"
+            app:nullable="true" />
+    </fragment>
 </navigation>
