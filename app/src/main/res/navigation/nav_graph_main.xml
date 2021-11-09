@@ -105,8 +105,8 @@
             android:name="isCopyAction"
             app:argType="boolean" />
         <argument
-            android:name="files"
-            app:argType="long[]"
+            android:name="paths"
+            app:argType="string[]"
             app:nullable="true" />
     </fragment>
 </navigation>

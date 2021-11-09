@@ -109,10 +109,10 @@ fun FileListFragment.onSelectedToolbarItemClick(item: MenuItem) {
         }
         R.id.mnu_move_folder -> {
             if (numFileSelected > 0) {
-                val fileIds = dataLocal?.file?.filter { it.isSelected }?.map { it.id }?.toLongArray()
+                val paths = dataLocal?.file?.filter { it.isSelected }?.map { it.path }?.toTypedArray()
                 safeNav(
                     R.id.fileListFragment,
-                    FileListFragmentDirections.actionFileListFragmentToCopyMovingFileFragment(false, fileIds)
+                    FileListFragmentDirections.actionFileListFragmentToCopyMovingFileFragment(false, paths)
                 )
             } else {
 
@@ -120,10 +120,10 @@ fun FileListFragment.onSelectedToolbarItemClick(item: MenuItem) {
         }
         R.id.mnu_copy_folder -> {
             if (numFileSelected > 0) {
-                val fileIds = dataLocal?.file?.filter { it.isSelected }?.map { it.id }?.toLongArray()
+                val paths = dataLocal?.file?.filter { it.isSelected }?.map { it.path }?.toTypedArray()
                 safeNav(
                     R.id.fileListFragment,
-                    FileListFragmentDirections.actionFileListFragmentToCopyMovingFileFragment(false, fileIds)
+                    FileListFragmentDirections.actionFileListFragmentToCopyMovingFileFragment(false, paths)
                 )
             } else {
 

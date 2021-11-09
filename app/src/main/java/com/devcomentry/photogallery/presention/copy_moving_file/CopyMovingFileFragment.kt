@@ -45,7 +45,7 @@ class CopyMovingFileFragment : BaseFragment<FragmentCopyMovingFileBinding>(R.lay
             )
             val folderList = mutableListOf(newFolder)
             val folderDetails = dataLocal.folder.map { folder ->
-                val files = dataLocal.file.filter { it.idFolder == folder.id }.toMutableList()
+                val files = dataLocal.file.filter { it.idFolder == folder.id }
                 FolderDetail(
                     folder,
                     files,
@@ -98,12 +98,12 @@ class CopyMovingFileFragment : BaseFragment<FragmentCopyMovingFileBinding>(R.lay
     }
 
     private val onCreateClick: (String) -> Unit = { folderName ->
-        File("/storage/emulated/0/Pictures/IMG_20211023_002549.jpg").copyTo(File("/storage/emulated/0/Pictures/$folderName/IMG_20211023_002549.jpg"))
-//        val files = arguments?.get("files") as List<FileModel>
-//        Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show()
-//        for (i in listSelectedFile!!.indices) {
-//            File(listSelectedFile[i].path).copyTo(File("${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)}$folderName/${listSelectedFile[i].name}.jpg"))
-//        }
+//        File("/storage/emulated/0/Pictures/IMG_20211023_002549.jpg").copyTo(File("/storage/emulated/0/Pictures/$folderName/IMG_20211023_002549.jpg"))
+        val paths = arguments?.getStringArray("paths")
+        Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show()
+        for (i in paths!!.indices) {
+            File(paths[i]).copyTo(File("${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)}/$folderName/a$i.jpg"))
+        }
     }
 }
 
