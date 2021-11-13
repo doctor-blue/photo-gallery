@@ -42,4 +42,8 @@
     <string name="details">Details</string>
     <string name="change_your_password">Change your password</string>
     <string name="hide_file_complete_mess">Hide files done! Please delete the file to ensure security</string>
+    <string name="enter_folder_name_message">Enter your folder name</string>
+    <string name="create_folder">Create folder</string>
+    <string name="folder_name">Folder name</string>
+
 </resources>

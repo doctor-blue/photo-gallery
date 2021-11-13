@@ -2,13 +2,17 @@ package com.devcomentry.photogallery.presention.albums
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.FragmentAlbumsBinding
 import com.devcomentry.photogallery.presention.albums.adapter.AlbumAdapter
 import com.devcomentry.photogallery.presention.all_file.AllFileFragmentDirections
 import com.devcomentry.photogallery.presention.common.BaseFragment
+import com.devcomentry.photogallery.presention.utils.HideBottomNavEvent
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.EventBus
 
 @AndroidEntryPoint
 class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_albums) {
@@ -28,7 +32,6 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_alb
                     files.map { it.size }.sum()
                 )
             }
-//            folderSize = 0f
 
             albumAdapter.submitList(folderDetails)
             showEmptyLisLayout(folderDetails.isEmpty())
@@ -45,6 +48,17 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(R.layout.fragment_alb
                 onToolbarItemClick(it)
                 true
             }
+
+            rcvListAlbum.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy > 0) {
+                        EventBus.getDefault().post(HideBottomNavEvent(true))
+                    } else {
+                        EventBus.getDefault().post(HideBottomNavEvent(false))
+                    }
+                }
+            })
         }
     }
 

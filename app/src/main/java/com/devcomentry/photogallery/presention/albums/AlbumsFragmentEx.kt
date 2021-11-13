@@ -1,7 +1,6 @@
 package com.devcomentry.photogallery.presention.albums
 
 import android.view.MenuItem
-import android.widget.Toast
 import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.presention.utils.gone
 import com.devcomentry.photogallery.presention.utils.show
@@ -31,7 +30,6 @@ fun AlbumsFragment.onToolbarItemClick(item: MenuItem) {
         }
         R.id.mnu_settings -> {
             safeNav(R.id.albumsFragment, R.id.settingFragment)
-            Toast.makeText(context, "Setting", Toast.LENGTH_SHORT).show()
         }
     }
 }

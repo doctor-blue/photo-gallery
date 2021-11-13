@@ -13,6 +13,7 @@ import com.devcomentry.photogallery.R
 import com.devcomentry.photogallery.databinding.DialogCancelDeleteBinding
 import com.devcomentry.photogallery.databinding.DialogSetPasswordBinding
 import com.devcomentry.photogallery.databinding.DialogTypePasswordBinding
+import com.devcomentry.photogallery.databinding.DialogCreateNewFolderBinding
 import com.devcomentry.photogallery.domain.model.DataLocal
 import com.devcomentry.photogallery.domain.model.FileModel
 import kotlinx.coroutines.CoroutineScope
@@ -47,6 +48,59 @@ fun Context.showDialogDelete(
     }
     binding.tvOk.setPreventDoubleClick {
         onConfirm()
+        dialog.dismiss()
+    }
+
+    lifecycle.addObserver(LifecycleEventObserver { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_PAUSE -> {
+                if (dialog.isShowing) {
+                    isShow = true
+                }
+                dialog.dismiss()
+            }
+
+            Lifecycle.Event.ON_RESUME -> {
+                if (isShow) {
+                    dialog.show()
+                }
+            }
+            else -> {
+
+            }
+        }
+    })
+    if (!dialog.isShowing) {
+        dialog.show()
+    }
+}
+
+fun Context.showDialogCreateNewFolder(
+    lifecycle: Lifecycle,
+    onCancel: () -> Unit,
+    onConfirm: (String) -> Unit
+) {
+    var isShow = false
+    val dialog: Dialog
+    val view: View = LayoutInflater.from(this).inflate(R.layout.dialog_create_new_folder, null)
+    val builder = AlertDialog.Builder(this)
+        .setView(view)
+        .setCancelable(false)
+
+
+    dialog = builder.create()
+    dialog.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+    val binding = DialogCreateNewFolderBinding.bind(view)
+
+
+
+    binding.tvCancel.setPreventDoubleClick {
+        onCancel()
+        dialog.dismiss()
+    }
+    binding.tvCreate.setPreventDoubleClick {
+        onConfirm(binding.tietFolderName.text.toString())
         dialog.dismiss()
     }
 
