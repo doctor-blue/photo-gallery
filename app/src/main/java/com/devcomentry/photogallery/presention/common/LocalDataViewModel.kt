@@ -65,7 +65,7 @@ class LocalDataViewModel @Inject constructor(
             MediaStore.Files.FileColumns.DATE_TAKEN,
             MediaStore.Files.FileColumns.WIDTH,
             MediaStore.Files.FileColumns.HEIGHT,
-            )
+        )
     else arrayOf(
         MediaStore.Files.FileColumns.MEDIA_TYPE,
         MediaStore.Files.FileColumns.DATA,
@@ -185,7 +185,10 @@ class LocalDataViewModel @Inject constructor(
                             }
 
 
-                        val contentUri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + idMedia)
+                        val contentUri = Uri.withAppendedPath(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            "" + idMedia
+                        )
                         val folderIdIndex: Int =
                             cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_ID)
                         val folderNameIndex: Int =
@@ -265,11 +268,18 @@ class LocalDataViewModel @Inject constructor(
                         }
 
                         if (!monthMap.containsKey(monthFile)) {
+                            val date = Calendar.getInstance()
+                            date.timeInMillis = timeModified
+                            date.set(Calendar.MINUTE, 59)
+                            date.set(Calendar.SECOND, 59)
+                            date.set(Calendar.HOUR, 23)
+
+
                             arrMonth.add(
                                 DateSelect(
                                     date = timeFile,
                                     type = IS_IMAGE,
-                                    time = timeModified,
+                                    time = date.timeInMillis,
                                     listIdFolder = arrayListOf(folderId),
                                     month = monthFile
                                 )
@@ -324,7 +334,7 @@ class LocalDataViewModel @Inject constructor(
             Constants.isDataLoaded = true
             Log.d("DataLocal", "getImages1: ")
             _dataLocal.postValue(
-               data
+                data
             )
         }
 
