@@ -5,9 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.IntentSender.SendIntentException
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.lifecycle.Lifecycle
@@ -17,6 +20,8 @@ import com.devcomentry.photogallery.domain.model.FileModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 
 fun performDeleteImage(
@@ -140,4 +145,44 @@ fun formatFileSize(size: Float, context: Context): String {
     }
 
     return (folderSize.decimalFormat() + unit)
+}
+
+fun copyToExternal(
+    context: Context,
+    pathCache: String,
+    path: String,
+    mediaType: String? = null,
+    success: () -> Unit,
+    error: () -> Unit
+) {
+    CoroutineScope(Dispatchers.IO).launch {
+        val input = File(pathCache)
+        val output = File(path)
+        try {
+            input.copyTo(output)
+            input.delete()
+            withContext(Dispatchers.Main) {
+                success()
+            }
+            MediaScannerConnection.scanFile(context, arrayOf(output.path), arrayOf(mediaType), null);
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                error()
+            }
+        }
+    }
+}
+
+fun File.copyTo(file: File) {
+    inputStream().use { input ->
+        file.outputStream().use { output ->
+            input.copyTo(output)
+        }
+    }
+}
+
+// internal storage
+fun getSaveDir(context: Context, folderName: String): String {
+    return context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        .toString() + "/$folderName"
 }
