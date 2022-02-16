@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presention.all_file.AllFileFragment">
+        tools:context=".presentation.all_file.AllFileFragment">
 
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout

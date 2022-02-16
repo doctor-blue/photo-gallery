@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/albumsFragment"
-        android:name="com.devcomentry.photogallery.presention.albums.AlbumsFragment"
+        android:name="com.devcomentry.photogallery.presentation.albums.AlbumsFragment"
         android:label="AlbumsFragment" >
         <action
             android:id="@+id/action_albumsFragment_to_settingFragment"
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/allFileFragment"
-        android:name="com.devcomentry.photogallery.presention.all_file.AllFileFragment"
+        android:name="com.devcomentry.photogallery.presentation.all_file.AllFileFragment"
         android:label="AllFileFragment">
         <action
             android:id="@+id/action_allFileFragment_to_albumsFragment"
@@ -35,7 +35,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.devcomentry.photogallery.presention.splash.SplashFragment"
+        android:name="com.devcomentry.photogallery.presentation.splash.SplashFragment"
         android:label="SplashFragment">
         <action
             android:id="@+id/action_splashFragment_to_allFileFragment"
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/permissionFragment"
-        android:name="com.devcomentry.photogallery.presention.permission.PermissionFragment"
+        android:name="com.devcomentry.photogallery.presentation.permission.PermissionFragment"
         android:label="PermissionFragment">
         <action
             android:id="@+id/action_permissionFragment_to_allFileFragment"
@@ -63,11 +63,11 @@
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.devcomentry.photogallery.presention.settings.SettingFragment"
+        android:name="com.devcomentry.photogallery.presentation.settings.SettingFragment"
         android:label="SettingFragment" />
     <fragment
         android:id="@+id/fullFileFragment"
-        android:name="com.devcomentry.photogallery.presention.full_file.FullFileFragment"
+        android:name="com.devcomentry.photogallery.presentation.full_file.FullFileFragment"
         android:label="FullFileFragment" >
         <argument
             android:name="idFile"
@@ -83,7 +83,7 @@
     </fragment>
     <fragment
         android:id="@+id/fileListFragment"
-        android:name="com.devcomentry.photogallery.presention.file_list.FileListFragment"
+        android:name="com.devcomentry.photogallery.presentation.file_list.FileListFragment"
         android:label="FileListFragment" >
         <argument
             android:name="idFolder"
@@ -102,7 +102,7 @@
     </fragment>
     <fragment
         android:id="@+id/copyMovingFileFragment"
-        android:name="com.devcomentry.photogallery.presention.copy_moving_file.CopyMovingFileFragment"
+        android:name="com.devcomentry.photogallery.presentation.copy_moving_file.CopyMovingFileFragment"
         android:label="CopyMovingFileFragment" >
         <argument
             android:name="isCopyAction"
@@ -114,7 +114,7 @@
     </fragment>
     <fragment
         android:id="@+id/fileDetailFragment"
-        android:name="com.devcomentry.photogallery.presention.photo_detail.FileDetailFragment"
+        android:name="com.devcomentry.photogallery.presentation.photo_detail.FileDetailFragment"
         android:label="FileDetailFragment">
         <argument
             android:name="idFile"

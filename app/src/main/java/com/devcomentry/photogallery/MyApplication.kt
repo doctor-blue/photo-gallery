@@ -2,7 +2,7 @@ package com.devcomentry.photogallery
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.devcomentry.photogallery.presention.MainActivity
+import com.devcomentry.photogallery.presentation.MainActivity
 import com.zxy.recovery.core.Recovery
 import dagger.hilt.android.HiltAndroidApp
 

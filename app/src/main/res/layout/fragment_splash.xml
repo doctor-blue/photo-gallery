@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        tools:context=".presention.splash.SplashFragment">
+        tools:context=".presentation.splash.SplashFragment">
 
         <!-- TODO: Update blank fragment layout -->
         <TextView
